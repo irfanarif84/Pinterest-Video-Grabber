@@ -8,9 +8,60 @@
 import * as zod from "zod";
 
 /**
- * Returns server health status
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
+});
+
+/**
+ * @summary Extract downloadable media from a Pinterest pin URL
+ */
+export const ExtractPinterestBody = zod.object({
+  url: zod
+    .string()
+    .describe(
+      "A Pinterest pin URL (pin.it short link or pinterest.com\/pin\/...)",
+    ),
+});
+
+export const ExtractPinterestResponse = zod.object({
+  type: zod.enum(["video", "image", "gif"]),
+  title: zod.string().optional(),
+  description: zod.string().optional(),
+  thumbnail: zod.string().optional(),
+  author: zod.string().optional(),
+  formats: zod.array(
+    zod.object({
+      label: zod
+        .string()
+        .describe(
+          'Human-readable label, e.g. \"1080p HD\", \"Original Image\", \"MP3\"',
+        ),
+      quality: zod
+        .string()
+        .optional()
+        .describe(
+          'Quality indicator (e.g., \"1080p\", \"720p\", \"original\")',
+        ),
+      url: zod
+        .string()
+        .describe(
+          "Direct media URL (use the proxy download endpoint to save with proper filename)",
+        ),
+      mimeType: zod.string(),
+      kind: zod.enum(["video", "image", "gif", "audio"]),
+      width: zod.number().optional(),
+      height: zod.number().optional(),
+    }),
+  ),
+});
+
+/**
+ * @summary Service statistics
+ */
+export const GetStatsResponse = zod.object({
+  downloads: zod.number(),
+  users: zod.number(),
+  averageSeconds: zod.number(),
 });

@@ -10,13 +10,14 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: pinterest
+    description: Pinterest media extraction
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +25,42 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /pinterest/extract:
+    post:
+      operationId: extractPinterest
+      tags: [pinterest]
+      summary: Extract downloadable media from a Pinterest pin URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExtractRequest"
+      responses:
+        "200":
+          description: Extracted media
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExtractResponse"
+        "400":
+          description: Invalid URL or extraction failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /pinterest/stats:
+    get:
+      operationId: getStats
+      tags: [pinterest]
+      summary: Service statistics
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatsResponse"
 components:
   schemas:
     HealthStatus:
@@ -31,6 +68,70 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
-
+      required: [status]
+    ExtractRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          description: A Pinterest pin URL (pin.it short link or pinterest.com/pin/...)
+      required: [url]
+    MediaFormat:
+      type: object
+      properties:
+        label:
+          type: string
+          description: Human-readable label, e.g. "1080p HD", "Original Image", "MP3"
+        quality:
+          type: string
+          description: Quality indicator (e.g., "1080p", "720p", "original")
+        url:
+          type: string
+          description: Direct media URL (use the proxy download endpoint to save with proper filename)
+        mimeType:
+          type: string
+        kind:
+          type: string
+          enum: [video, image, gif, audio]
+        width:
+          type: integer
+        height:
+          type: integer
+      required: [label, url, mimeType, kind]
+    ExtractResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [video, image, gif]
+        title:
+          type: string
+        description:
+          type: string
+        thumbnail:
+          type: string
+        author:
+          type: string
+        formats:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaFormat"
+      required: [type, formats]
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: string
+      required: [error]
+    StatsResponse:
+      type: object
+      properties:
+        downloads:
+          type: integer
+        users:
+          type: integer
+        averageSeconds:
+          type: number
+      required: [downloads, users, averageSeconds]

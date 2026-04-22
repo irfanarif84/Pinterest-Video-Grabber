@@ -8,3 +8,60 @@
 export interface HealthStatus {
   status: string;
 }
+
+export interface ExtractRequest {
+  /** A Pinterest pin URL (pin.it short link or pinterest.com/pin/...) */
+  url: string;
+}
+
+export type MediaFormatKind =
+  (typeof MediaFormatKind)[keyof typeof MediaFormatKind];
+
+export const MediaFormatKind = {
+  video: "video",
+  image: "image",
+  gif: "gif",
+  audio: "audio",
+} as const;
+
+export interface MediaFormat {
+  /** Human-readable label, e.g. "1080p HD", "Original Image", "MP3" */
+  label: string;
+  /** Quality indicator (e.g., "1080p", "720p", "original") */
+  quality?: string;
+  /** Direct media URL (use the proxy download endpoint to save with proper filename) */
+  url: string;
+  mimeType: string;
+  kind: MediaFormatKind;
+  width?: number;
+  height?: number;
+}
+
+export type ExtractResponseType =
+  (typeof ExtractResponseType)[keyof typeof ExtractResponseType];
+
+export const ExtractResponseType = {
+  video: "video",
+  image: "image",
+  gif: "gif",
+} as const;
+
+export interface ExtractResponse {
+  type: ExtractResponseType;
+  title?: string;
+  description?: string;
+  thumbnail?: string;
+  author?: string;
+  formats: MediaFormat[];
+}
+
+export interface ErrorResponse {
+  error: string;
+  code?: string;
+}
+
+export interface StatsResponse {
+  downloads: number;
+  users: number;
+  averageSeconds: number;
+}
