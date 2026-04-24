@@ -12,20 +12,20 @@ const faqs = [
     a: "It's simple: copy the URL of the Pinterest video or image, paste it into the search box at the top of this page, and click 'Download'. You'll get options to save it in various qualities."
   },
   {
-    q: "Is PinSave completely free?",
-    a: "Yes! PinSave is 100% free to use. There are no hidden fees, no subscriptions, and no limits on how many times you can download."
+    q: "Is PinSavePro completely free?",
+    a: "Yes! PinSavePro is 100% free to use. There are no hidden fees, no subscriptions, and no limits on how many times you can download."
   },
   {
     q: "Do I need to create an account?",
-    a: "No account or registration is required. You can use PinSave instantly as an anonymous user."
+    a: "No account or registration is required. You can use PinSavePro instantly as an anonymous user."
   },
   {
     q: "Are there watermarks on the downloaded videos?",
-    a: "No, all videos and images downloaded through PinSave are completely watermark-free, preserving the original quality."
+    a: "No, all videos and images downloaded through PinSavePro are completely watermark-free, preserving the original quality."
   },
   {
     q: "Can I download videos on my iPhone or Android?",
-    a: "Absolutely. PinSave works perfectly on any modern web browser across iOS, Android, Windows, and Mac devices."
+    a: "Absolutely. PinSavePro works perfectly on any modern web browser across iOS, Android, Windows, and Mac devices."
   },
   {
     q: "Can I convert Pinterest videos to MP3 audio?",

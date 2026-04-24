@@ -15,7 +15,7 @@ export default function Home() {
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground shadow-[0_0_15px_rgba(232,0,61,0.5)]">
             <Download size={18} strokeWidth={2.5} />
           </div>
-          Pin<span className="text-primary">Save</span>
+          Pin<span className="text-primary">SavePro</span>
         </a>
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
           <a href="#how-to" className="hover:text-foreground transition-colors">How To</a>
@@ -106,7 +106,7 @@ export default function Home() {
               {
                 step: "02",
                 title: "Paste it Here",
-                desc: "Return to PinSave and paste the copied link into the search box at the top of this page."
+                desc: "Return to PinSavePro and paste the copied link into the search box at the top of this page."
               },
               {
                 step: "03",
@@ -147,7 +147,7 @@ export default function Home() {
 
             <div>
               <h2 className="font-display text-3xl font-bold mb-4">Works Everywhere</h2>
-              <p className="text-muted-foreground mb-8">PinSave is a web-based app that works seamlessly across all your devices. No installation required.</p>
+              <p className="text-muted-foreground mb-8">PinSavePro is a web-based app that works seamlessly across all your devices. No installation required.</p>
               
               <div className="grid grid-cols-2 gap-4">
                 {[
@@ -176,7 +176,7 @@ export default function Home() {
         <section id="features" className="py-24 px-6">
           <div className="max-w-6xl mx-auto">
             <div className="mb-16">
-              <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Why Choose PinSave?</h2>
+              <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Why Choose PinSavePro?</h2>
               <p className="text-muted-foreground max-w-2xl">The most robust tool for extracting high-quality media from Pinterest.</p>
             </div>
 
@@ -204,8 +204,8 @@ export default function Home() {
         {/* COMPARISON TABLE */}
         <section className="py-24 px-6 bg-card/20 border-y border-border/30">
           <div className="max-w-4xl mx-auto text-center mb-16">
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">PinSave vs. Competitors</h2>
-            <p className="text-muted-foreground">See why thousands of users switch to PinSave every day.</p>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">PinSavePro vs. Competitors</h2>
+            <p className="text-muted-foreground">See why thousands of users switch to PinSavePro every day.</p>
           </div>
 
           <div className="max-w-4xl mx-auto overflow-x-auto">
@@ -213,7 +213,7 @@ export default function Home() {
               <thead>
                 <tr>
                   <th className="p-4 border-b border-border text-muted-foreground font-medium">Feature</th>
-                  <th className="p-4 border-b border-border font-bold text-primary text-center">PinSave</th>
+                  <th className="p-4 border-b border-border font-bold text-primary text-center">PinSavePro</th>
                   <th className="p-4 border-b border-border text-muted-foreground text-center">Other Apps</th>
                 </tr>
               </thead>
@@ -247,7 +247,7 @@ export default function Home() {
         {/* USE CASES */}
         <section className="py-24 px-6 max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Who uses PinSave?</h2>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Who uses PinSavePro?</h2>
             <p className="text-muted-foreground">Built for creatives, marketers, and everyone in between.</p>
           </div>
 
@@ -283,7 +283,7 @@ export default function Home() {
                   <li>Find the video, reel, or image you want to download.</li>
                   <li>Tap the <strong>Share</strong> icon (an arrow or three dots).</li>
                   <li>Select <strong>Copy Link</strong> from the menu.</li>
-                  <li>Open your mobile browser (Safari, Chrome) and navigate to <strong>PinSave.io</strong>.</li>
+                  <li>Open your mobile browser (Safari, Chrome) and navigate to <strong>PinSavePro.io</strong>.</li>
                   <li>Paste the link into the search bar and tap Download.</li>
                   <li>Choose your quality format to save to your camera roll or files app.</li>
                 </ol>
@@ -295,7 +295,7 @@ export default function Home() {
                   <li>Go to <strong>Pinterest.com</strong> on your desktop web browser.</li>
                   <li>Click on the pin you want to save.</li>
                   <li>Copy the URL from the browser's address bar at the top of the screen.</li>
-                  <li>Go to <strong>PinSave.io</strong> and paste the URL into our downloader box.</li>
+                  <li>Go to <strong>PinSavePro.io</strong> and paste the URL into our downloader box.</li>
                   <li>Click the Download button and select your preferred resolution (up to 4K).</li>
                   <li>The file will be saved directly to your computer's Downloads folder.</li>
                 </ol>
@@ -308,7 +308,7 @@ export default function Home() {
         <section className="py-24 px-6 max-w-3xl mx-auto text-center">
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-6">Our Mission</h2>
           <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-            PinSave was built to solve a simple problem: downloading media from Pinterest shouldn't be hard, and it shouldn't require sketchy, ad-filled websites. 
+            PinSavePro was built to solve a simple problem: downloading media from Pinterest shouldn't be hard, and it shouldn't require sketchy, ad-filled websites. 
           </p>
           <p className="text-lg text-muted-foreground leading-relaxed">
             We believe in creating fast, clean, and completely free utility tools. We don't log your data, we don't track your downloads, and we don't watermark your content. You get exactly what you came for—instantly.
@@ -334,7 +334,7 @@ export default function Home() {
                 <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center text-primary-foreground">
                   <Download size={14} strokeWidth={2.5} />
                 </div>
-                Pin<span className="text-primary">Save</span>
+                Pin<span className="text-primary">SavePro</span>
               </a>
               <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
                 The fastest, most reliable tool to download videos, images, and GIFs from Pinterest for free.
@@ -360,9 +360,9 @@ export default function Home() {
             </div>
           </div>
           <div className="pt-8 border-t border-border/50 text-center md:text-left text-xs text-muted-foreground flex flex-col md:flex-row justify-between items-center gap-4">
-            <p>© {new Date().getFullYear()} PinSave. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} PinSavePro. All rights reserved.</p>
             <p className="max-w-xl text-center md:text-right opacity-60">
-              Disclaimer: PinSave is an independent service and is not affiliated with, endorsed by, or sponsored by Pinterest. We respect intellectual property rights and ask users to download only content they have permission to use.
+              Disclaimer: PinSavePro is an independent service and is not affiliated with, endorsed by, or sponsored by Pinterest. We respect intellectual property rights and ask users to download only content they have permission to use.
             </p>
           </div>
         </div>
