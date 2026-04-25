@@ -31,6 +31,8 @@ export default function SiteFooter() {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/how-to-download-pinterest-videos" className="hover:text-foreground">How To Guide</Link></li>
               <li><Link href="/" className="hover:text-foreground">FAQ</Link></li>
+              <li><Link href="/privacy-policy" className="hover:text-foreground">Privacy Policy</Link></li>
+              <li><Link href="/terms-of-service" className="hover:text-foreground">Terms of Service</Link></li>
               <li><a href="/sitemap.xml" className="hover:text-foreground">Sitemap</a></li>
               <li><a href="/robots.txt" className="hover:text-foreground">robots.txt</a></li>
             </ul>

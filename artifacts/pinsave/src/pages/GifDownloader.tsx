@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Image as ImageIcon, Zap, Shield, Check } from "lucide-react";
 import DownloaderForm from "@/components/DownloaderForm";
@@ -13,6 +14,33 @@ export default function GifDownloader() {
     canonical: "/pinterest-gif-downloader",
     keywords: "pinterest gif downloader, download pinterest gif, save pinterest gif, animated pinterest pin downloader",
   });
+
+  useEffect(() => {
+    const id = "ld-gif-page";
+    if (document.getElementById(id)) return;
+    const script = document.createElement("script");
+    script.id = id;
+    script.type = "application/ld+json";
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: "Pinterest GIF Downloader",
+      description:
+        "Free tool to download animated GIFs from Pinterest without watermark.",
+      url: `${ORIGIN_URL}/pinterest-gif-downloader`,
+      breadcrumb: {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: ORIGIN_URL + "/" },
+          { "@type": "ListItem", position: 2, name: "Pinterest GIF Downloader", item: ORIGIN_URL + "/pinterest-gif-downloader" },
+        ],
+      },
+    });
+    document.head.appendChild(script);
+    return () => {
+      document.getElementById(id)?.remove();
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative selection:bg-primary/30">

@@ -8,6 +8,8 @@ import GifDownloader from "@/pages/GifDownloader";
 import ImageDownloader from "@/pages/ImageDownloader";
 import Mp3Converter from "@/pages/Mp3Converter";
 import HowToGuide from "@/pages/HowToGuide";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsOfService from "@/pages/TermsOfService";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +21,8 @@ function Router() {
       <Route path="/pinterest-image-downloader" component={ImageDownloader} />
       <Route path="/pinterest-to-mp3" component={Mp3Converter} />
       <Route path="/how-to-download-pinterest-videos" component={HowToGuide} />
+      <Route path="/privacy-policy" component={PrivacyPolicy} />
+      <Route path="/terms-of-service" component={TermsOfService} />
       <Route component={NotFound} />
     </Switch>
   );

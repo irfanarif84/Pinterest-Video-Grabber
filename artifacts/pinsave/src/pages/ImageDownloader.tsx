@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Image as ImageIcon, Zap, Shield, Check } from "lucide-react";
 import DownloaderForm from "@/components/DownloaderForm";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { usePageSEO } from "@/lib/seo";
+import { usePageSEO, ORIGIN_URL } from "@/lib/seo";
 
 export default function ImageDownloader() {
   usePageSEO({
@@ -13,6 +14,33 @@ export default function ImageDownloader() {
     canonical: "/pinterest-image-downloader",
     keywords: "pinterest image downloader, download pinterest images, pinterest picture downloader, save pinterest photo",
   });
+
+  useEffect(() => {
+    const id = "ld-image-page";
+    if (document.getElementById(id)) return;
+    const script = document.createElement("script");
+    script.id = id;
+    script.type = "application/ld+json";
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: "Pinterest Image Downloader",
+      description:
+        "Free tool to download Pinterest images and photos in full resolution without watermark.",
+      url: `${ORIGIN_URL}/pinterest-image-downloader`,
+      breadcrumb: {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: ORIGIN_URL + "/" },
+          { "@type": "ListItem", position: 2, name: "Pinterest Image Downloader", item: ORIGIN_URL + "/pinterest-image-downloader" },
+        ],
+      },
+    });
+    document.head.appendChild(script);
+    return () => {
+      document.getElementById(id)?.remove();
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background flex flex-col selection:bg-primary/30">

@@ -7,7 +7,9 @@ export interface PageSEO {
   keywords?: string;
 }
 
-const ORIGIN = "https://pinterest-video-grabber--irfanarif1984.replit.app";
+const ORIGIN =
+  import.meta.env.VITE_SITE_ORIGIN ||
+  "https://pinterest-video-grabber--irfanarif1984.replit.app";
 
 function setMeta(selector: string, attr: string, value: string) {
   let el = document.head.querySelector<HTMLMetaElement>(selector);

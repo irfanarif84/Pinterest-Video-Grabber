@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Apple, Smartphone, Monitor, Laptop } from "lucide-react";
 import DownloaderForm from "@/components/DownloaderForm";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { usePageSEO } from "@/lib/seo";
+import { usePageSEO, ORIGIN_URL } from "@/lib/seo";
 
 export default function HowToGuide() {
   usePageSEO({
@@ -13,6 +14,40 @@ export default function HowToGuide() {
     canonical: "/how-to-download-pinterest-videos",
     keywords: "how to download pinterest video, how to save pinterest video, pinterest download tutorial, pinterest video guide",
   });
+
+  useEffect(() => {
+    const id = "ld-howto-article";
+    if (document.getElementById(id)) return;
+    const script = document.createElement("script");
+    script.id = id;
+    script.type = "application/ld+json";
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: "How to Download Pinterest Videos in 2026",
+      description:
+        "Step-by-step guide to downloading Pinterest videos on iPhone, Android, and desktop.",
+      author: { "@type": "Organization", name: "PinSavePro" },
+      publisher: {
+        "@type": "Organization",
+        name: "PinSavePro",
+        logo: {
+          "@type": "ImageObject",
+          url: `${ORIGIN_URL}/favicon.svg`,
+        },
+      },
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": `${ORIGIN_URL}/how-to-download-pinterest-videos`,
+      },
+      datePublished: "2026-04-25",
+      dateModified: "2026-04-25",
+    });
+    document.head.appendChild(script);
+    return () => {
+      document.getElementById(id)?.remove();
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background flex flex-col selection:bg-primary/30">
