@@ -1,0 +1,811 @@
+# REPLIT PROMPT — Full Advanced SEO & Technical SEO Implementation
+# For: PinSavePro — Pinterest Video Downloader
+# Site: https://pinterest-video-grabber--irfanarif1984.replit.app
+
+---
+
+## YOUR TASK
+
+You are a senior full-stack developer and SEO engineer. This is a Pinterest Video Downloader website (PinSavePro). Your job is to implement a **complete, production-grade SEO overhaul** covering every Advanced SEO and Technical SEO requirement. Do NOT skip any item. Implement all of the following in full.
+
+---
+
+## AUDIT FINDINGS — WHAT IS MISSING
+
+Based on audit of the live site:
+- ❌ Content is JavaScript-rendered (not server-side rendered) — Googlebot may not index it
+- ❌ No sitemap.xml
+- ❌ No robots.txt
+- ❌ No structured data / JSON-LD schema
+- ❌ No Open Graph or Twitter Card meta tags
+- ❌ No canonical tag
+- ❌ No hreflang tags
+- ❌ No web manifest / PWA meta
+- ❌ No breadcrumb schema
+- ❌ No FAQ schema
+- ❌ No HowTo schema
+- ❌ No security headers (X-Frame-Options, CSP, etc.)
+- ❌ No Core Web Vitals optimizations
+- ❌ No preconnect / prefetch resource hints
+- ❌ No image alt tags or lazy loading
+- ❌ No semantic HTML structure (landmarks, ARIA)
+- ❌ No internal linking architecture
+- ❌ No sub-pages targeting keyword clusters
+- ❌ No 404 error page
+- ❌ No performance optimizations (minification, compression)
+
+---
+
+## PART 1 — SERVER-SIDE RENDERING (CRITICAL)
+
+The site MUST serve fully rendered HTML from the server so Googlebot can index it without executing JavaScript.
+
+If using Node.js/Express:
+```js
+// server.js — serve fully rendered HTML for every route
+app.get('/', (req, res) => {
+  res.send(renderHomePage()); // returns complete HTML string, not a JS bundle
+});
+app.get('/pinterest-gif-downloader', (req, res) => res.send(renderGifPage()));
+app.get('/pinterest-image-downloader', (req, res) => res.send(renderImagePage()));
+app.get('/pinterest-to-mp3', (req, res) => res.send(renderMp3Page()));
+app.get('/how-to-download-pinterest-videos', (req, res) => res.send(renderHowToPage()));
+app.get('/sitemap.xml', (req, res) => { res.header('Content-Type','application/xml'); res.send(generateSitemap()); });
+app.get('/robots.txt', (req, res) => { res.header('Content-Type','text/plain'); res.send(generateRobots()); });
+```
+
+Every page must render its full HTML content including all text, headings, and content — server-side — before sending to browser.
+
+---
+
+## PART 2 — META TAGS (Every Page)
+
+Add ALL of the following inside `<head>` on every page. Replace values per-page:
+
+```html
+<!-- Primary SEO -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PinSavePro – Free Pinterest Video Downloader | HD, 4K, MP4, MP3</title>
+<meta name="description" content="Download Pinterest videos, images, and GIFs for free in HD, 2K, and 4K. No login required. Works on Android, iPhone & desktop. Fast, safe, 100% free." />
+<meta name="keywords" content="pinterest video downloader, download pinterest videos, pinterest to mp4, save pinterest video, pinterest gif downloader, pinterest image downloader, pinterest downloader online, pinterest video download without watermark" />
+<meta name="author" content="PinSavePro" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="googlebot" content="index, follow" />
+<link rel="canonical" href="https://YOUR-DOMAIN.com/" />
+
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://YOUR-DOMAIN.com/" />
+<meta property="og:title" content="PinSavePro – Free Pinterest Video Downloader" />
+<meta property="og:description" content="Download Pinterest videos, GIFs & images for free in HD. No login, no watermark." />
+<meta property="og:image" content="https://YOUR-DOMAIN.com/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="PinSavePro Pinterest Video Downloader" />
+<meta property="og:site_name" content="PinSavePro" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@PinSavePro" />
+<meta name="twitter:title" content="PinSavePro – Free Pinterest Video Downloader" />
+<meta name="twitter:description" content="Download Pinterest videos, GIFs & images for free in HD. No login, no watermark." />
+<meta name="twitter:image" content="https://YOUR-DOMAIN.com/og-image.jpg" />
+<meta name="twitter:image:alt" content="PinSavePro Pinterest Video Downloader" />
+
+<!-- Hreflang — Multi-language targeting -->
+<link rel="alternate" hreflang="en" href="https://YOUR-DOMAIN.com/" />
+<link rel="alternate" hreflang="es" href="https://YOUR-DOMAIN.com/es/" />
+<link rel="alternate" hreflang="pt" href="https://YOUR-DOMAIN.com/pt/" />
+<link rel="alternate" hreflang="de" href="https://YOUR-DOMAIN.com/de/" />
+<link rel="alternate" hreflang="fr" href="https://YOUR-DOMAIN.com/fr/" />
+<link rel="alternate" hreflang="x-default" href="https://YOUR-DOMAIN.com/" />
+
+<!-- Performance Resource Hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="dns-prefetch" href="//api.pinterest.com" />
+<link rel="dns-prefetch" href="//i.pinimg.com" />
+
+<!-- PWA / Web App -->
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#E8003D" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="PinSavePro" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
+<!-- Favicon set -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+```
+
+---
+
+## PART 3 — JSON-LD STRUCTURED DATA (Every Page)
+
+### 3A. WebApplication Schema (Homepage)
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PinSavePro Pinterest Video Downloader",
+  "url": "https://YOUR-DOMAIN.com",
+  "description": "Free online tool to download Pinterest videos, images, and GIFs in HD, 2K, and 4K quality without watermark. No login required.",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript. Requires HTML5.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "15420",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "featureList": [
+    "HD Video Download up to 4K",
+    "GIF Download",
+    "Image Download",
+    "MP3 Audio Extraction",
+    "No Watermark",
+    "No Login Required",
+    "Works on Mobile and Desktop"
+  ],
+  "screenshot": "https://YOUR-DOMAIN.com/screenshot.jpg",
+  "author": {
+    "@type": "Organization",
+    "name": "PinSavePro",
+    "url": "https://YOUR-DOMAIN.com"
+  }
+}
+</script>
+```
+
+### 3B. Organization Schema
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "PinSavePro",
+  "url": "https://YOUR-DOMAIN.com",
+  "logo": "https://YOUR-DOMAIN.com/logo.png",
+  "sameAs": [
+    "https://twitter.com/PinSavePro",
+    "https://facebook.com/PinSavePro"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "availableLanguage": ["English"]
+  }
+}
+</script>
+```
+
+### 3C. BreadcrumbList Schema (all inner pages)
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://YOUR-DOMAIN.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Pinterest GIF Downloader", "item": "https://YOUR-DOMAIN.com/pinterest-gif-downloader" }
+  ]
+}
+</script>
+```
+
+### 3D. FAQPage Schema (Homepage)
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I download a Pinterest video?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Copy the Pinterest video URL (tap ••• → Copy Link in the app), paste it into the PinSavePro input box, and click Download. Your video will be ready in seconds — no login required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is PinSavePro free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, PinSavePro is 100% free to use. No subscription, no premium tier, no registration required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does PinSavePro work on iPhone and Android?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. PinSavePro works on all mobile browsers including Safari on iPhone and Chrome on Android. No app install needed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What formats and qualities are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PinSavePro supports MP4 video in HD (720p), Full HD (1080p), 2K, and 4K where available. It also supports MP3 audio extraction, GIF downloads, and image downloads in JPG, PNG, and WebP."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I download Pinterest GIFs and images too?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. PinSavePro supports video pins, GIF pins, image pins, Idea Pins, and Pinterest Reels — all from the same input box."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does PinSavePro store my downloaded files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. PinSavePro does not store any files on its servers. All content is streamed directly from Pinterest's CDN to your device."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where are downloaded files saved on my device?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Files are saved to your browser's default Downloads folder. On desktop press Ctrl+J (Windows) or Cmd+J (Mac) to view downloads. On iPhone files may go to the Files app first."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I convert Pinterest video to MP3?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. After pasting a Pinterest video URL, choose the MP3 option from the download buttons to extract and save only the audio track."
+      }
+    }
+  ]
+}
+</script>
+```
+
+### 3E. HowTo Schema (How-To section)
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Download Pinterest Videos",
+  "description": "Download any Pinterest video, GIF, or image for free in HD using PinSavePro.",
+  "totalTime": "PT1M",
+  "tool": [{ "@type": "HowToTool", "name": "PinSavePro" }],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": "1",
+      "name": "Copy the Pinterest Link",
+      "text": "Open Pinterest and find the video. Tap the ••• icon and select Copy Link. On desktop, copy the URL from the browser address bar.",
+      "image": "https://YOUR-DOMAIN.com/images/step1.jpg"
+    },
+    {
+      "@type": "HowToStep",
+      "position": "2",
+      "name": "Paste the URL into PinSavePro",
+      "text": "Go to PinSavePro.com and paste the copied Pinterest URL into the download input box.",
+      "image": "https://YOUR-DOMAIN.com/images/step2.jpg"
+    },
+    {
+      "@type": "HowToStep",
+      "position": "3",
+      "name": "Choose Quality and Download",
+      "text": "Click the Download button. Select your preferred quality (HD, 2K, 4K, or MP3) and the file will save to your device.",
+      "image": "https://YOUR-DOMAIN.com/images/step3.jpg"
+    }
+  ]
+}
+</script>
+```
+
+### 3F. SiteLinksSearchBox Schema
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "PinSavePro",
+  "url": "https://YOUR-DOMAIN.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://YOUR-DOMAIN.com/?url={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+```
+
+---
+
+## PART 4 — robots.txt
+
+Create `/robots.txt` served at `GET /robots.txt`:
+
+```
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /private/
+
+# Sitemaps
+Sitemap: https://YOUR-DOMAIN.com/sitemap.xml
+Sitemap: https://YOUR-DOMAIN.com/sitemap-images.xml
+
+# Crawl-delay for heavy bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+```
+
+---
+
+## PART 5 — sitemap.xml
+
+Create `/sitemap.xml` served at `GET /sitemap.xml` with dynamic `lastmod` dates:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <url>
+    <loc>https://YOUR-DOMAIN.com/</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://YOUR-DOMAIN.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://YOUR-DOMAIN.com/es/"/>
+  </url>
+
+  <url>
+    <loc>https://YOUR-DOMAIN.com/pinterest-gif-downloader</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://YOUR-DOMAIN.com/pinterest-image-downloader</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://YOUR-DOMAIN.com/pinterest-to-mp3</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://YOUR-DOMAIN.com/how-to-download-pinterest-videos</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://YOUR-DOMAIN.com/blog</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://YOUR-DOMAIN.com/about</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://YOUR-DOMAIN.com/privacy-policy</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://YOUR-DOMAIN.com/terms-of-service</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>
+```
+
+---
+
+## PART 6 — manifest.json (PWA)
+
+Create `/manifest.json`:
+
+```json
+{
+  "name": "PinSavePro – Pinterest Video Downloader",
+  "short_name": "PinSavePro",
+  "description": "Download Pinterest videos, GIFs, and images for free in HD quality.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#E8003D",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icons/icon-72x72.png",   "sizes": "72x72",   "type": "image/png" },
+    { "src": "/icons/icon-96x96.png",   "sizes": "96x96",   "type": "image/png" },
+    { "src": "/icons/icon-128x128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "/icons/icon-144x144.png", "sizes": "144x144", "type": "image/png" },
+    { "src": "/icons/icon-152x152.png", "sizes": "152x152", "type": "image/png" },
+    { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon-384x384.png", "sizes": "384x384", "type": "image/png" },
+    { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["utilities", "productivity"],
+  "screenshots": [
+    { "src": "/screenshots/desktop.jpg", "sizes": "1280x720", "type": "image/jpeg", "form_factor": "wide" },
+    { "src": "/screenshots/mobile.jpg",  "sizes": "390x844",  "type": "image/jpeg", "form_factor": "narrow" }
+  ]
+}
+```
+
+---
+
+## PART 7 — HTTP SECURITY & PERFORMANCE HEADERS
+
+In your Express server (or Replit's `.replit` config), add these response headers to EVERY request:
+
+```js
+app.use((req, res, next) => {
+  // Security
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+
+  // Performance
+  res.setHeader('Vary', 'Accept-Encoding');
+
+  // Cache static assets aggressively
+  if (req.url.match(/\.(css|js|woff2|png|jpg|webp|svg|ico)$/)) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  } else {
+    res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
+  }
+
+  next();
+});
+```
+
+Enable gzip/brotli compression:
+```js
+const compression = require('compression');
+app.use(compression({ level: 6 }));
+```
+
+---
+
+## PART 8 — SEMANTIC HTML STRUCTURE
+
+Every page must use proper semantic HTML. Required structure:
+
+```html
+<body>
+  <header role="banner">
+    <nav aria-label="Main navigation">...</nav>
+  </header>
+
+  <main role="main" id="main-content">
+    <section aria-labelledby="hero-heading">
+      <h1 id="hero-heading">...</h1>
+    </section>
+
+    <section aria-labelledby="howto-heading" id="how-to">
+      <h2 id="howto-heading">How to Download Pinterest Videos</h2>
+      ...
+    </section>
+
+    <section aria-labelledby="features-heading" id="features">
+      <h2 id="features-heading">Features</h2>
+      ...
+    </section>
+
+    <section aria-labelledby="faq-heading" id="faq">
+      <h2 id="faq-heading">Frequently Asked Questions</h2>
+      ...
+    </section>
+  </main>
+
+  <footer role="contentinfo">...</footer>
+</body>
+```
+
+Rules:
+- Only ONE `<h1>` per page containing the primary keyword
+- `<h2>` for all major sections
+- `<h3>` for sub-sections and card titles
+- Never skip heading levels (h1 → h3 without h2)
+- All images MUST have descriptive `alt=""` attributes
+- All interactive elements need `aria-label` or visible text
+- Add `<a href="#main-content" class="skip-link">Skip to main content</a>` as the very first element in body (for accessibility & crawlability)
+
+---
+
+## PART 9 — CORE WEB VITALS OPTIMIZATIONS
+
+### LCP (Largest Contentful Paint) — Target: < 2.5s
+```html
+<!-- Preload the hero section's LCP image or font -->
+<link rel="preload" as="image" href="/og-image.jpg" />
+<link rel="preload" as="font" href="/fonts/Syne-Bold.woff2" type="font/woff2" crossorigin />
+
+<!-- Inline critical CSS directly in <head> — do NOT load it via external file -->
+<style>
+  /* Paste all above-the-fold CSS here inline */
+</style>
+
+<!-- Load non-critical CSS asynchronously -->
+<link rel="stylesheet" href="/styles.css" media="print" onload="this.media='all'" />
+```
+
+### CLS (Cumulative Layout Shift) — Target: < 0.1
+- Set explicit `width` and `height` on ALL images and video elements
+- Reserve space for the download result section using `min-height`
+- Never inject content above existing content after load
+
+### FID / INP (Interaction to Next Paint) — Target: < 200ms
+- Defer all non-critical JavaScript: `<script src="/app.js" defer></script>`
+- Break up long tasks using `setTimeout` or `requestIdleCallback`
+- Avoid layout-triggering JS in click handlers
+
+---
+
+## PART 10 — IMAGE SEO
+
+All images on the site must follow this pattern:
+```html
+<img
+  src="/images/how-to-download-pinterest-video-step1.jpg"
+  alt="Screenshot showing how to copy a Pinterest video link on mobile"
+  width="800"
+  height="450"
+  loading="lazy"
+  decoding="async"
+/>
+```
+
+Rules:
+- File names must be descriptive and hyphenated (not `img1.jpg`)
+- `alt` text must describe what's in the image, not be generic
+- Use `loading="lazy"` for all below-the-fold images
+- Use `loading="eager"` only for the hero/LCP image
+- Serve images in WebP format with JPG fallback
+- Add image sitemap at `/sitemap-images.xml`
+
+---
+
+## PART 11 — SUB-PAGES (Keyword Cluster Targeting)
+
+Create these separate pages, each fully server-rendered with unique meta tags and content:
+
+### Page 1: `/pinterest-gif-downloader`
+- Title: `Pinterest GIF Downloader – Save Animated GIFs Free | PinSavePro`
+- Description: `Download animated GIFs from Pinterest for free. No watermark, no login. Works on Android, iPhone & PC.`
+- H1: `Pinterest GIF Downloader – Save Any Animated Pin`
+- Unique content: 300+ words about downloading GIFs specifically
+
+### Page 2: `/pinterest-image-downloader`
+- Title: `Pinterest Image Downloader – Download HD Photos Free | PinSavePro`
+- Description: `Save Pinterest images and photos in full resolution for free. JPG, PNG, WebP supported. No account needed.`
+- H1: `Pinterest Image Downloader – Full Resolution, Free`
+- Unique content: 300+ words about image downloads
+
+### Page 3: `/pinterest-to-mp3`
+- Title: `Pinterest to MP3 Converter – Extract Audio Free | PinSavePro`
+- Description: `Convert Pinterest videos to MP3 audio files for free. High quality audio extraction. No login required.`
+- H1: `Pinterest to MP3 – Free Audio Extractor`
+- Unique content: 300+ words about MP3 conversion
+
+### Page 4: `/how-to-download-pinterest-videos`
+- Title: `How to Download Pinterest Videos in 2026 – Complete Guide`
+- Description: `Step-by-step guide to downloading Pinterest videos on iPhone, Android, and desktop. Works without an app.`
+- H1: `How to Download Pinterest Videos (2026 Guide)`
+- Unique content: 600+ word tutorial article
+
+Each sub-page must include:
+- Its own unique JSON-LD schema
+- Its own canonical URL
+- Breadcrumb navigation linking back to home
+- Internal links to the homepage downloader tool
+- Internal links to related sub-pages
+
+---
+
+## PART 12 — INTERNAL LINKING
+
+Add these internal links throughout every page:
+
+Footer must include:
+```html
+<nav aria-label="Footer links">
+  <a href="/">Pinterest Video Downloader</a>
+  <a href="/pinterest-gif-downloader">Pinterest GIF Downloader</a>
+  <a href="/pinterest-image-downloader">Pinterest Image Downloader</a>
+  <a href="/pinterest-to-mp3">Pinterest to MP3</a>
+  <a href="/how-to-download-pinterest-videos">How to Download Pinterest Videos</a>
+  <a href="/blog">Blog</a>
+  <a href="/about">About</a>
+  <a href="/privacy-policy">Privacy Policy</a>
+  <a href="/terms-of-service">Terms of Service</a>
+</nav>
+```
+
+Use anchor text that contains target keywords — never just "click here" or "learn more".
+
+---
+
+## PART 13 — 404 ERROR PAGE
+
+Create a custom 404 page at `/404.html` or handle in Express:
+```js
+app.use((req, res) => {
+  res.status(404).send(`
+    <html>
+      <head>
+        <title>404 – Page Not Found | PinSavePro</title>
+        <meta name="robots" content="noindex, follow" />
+      </head>
+      <body>
+        <h1>Page Not Found</h1>
+        <p>The page you're looking for doesn't exist.</p>
+        <a href="/">← Back to Pinterest Video Downloader</a>
+      </body>
+    </html>
+  `);
+});
+```
+
+---
+
+## PART 14 — CONTENT SEO (On-Page)
+
+On the homepage, include all of the following keyword phrases naturally in the body content:
+- "pinterest video downloader" — in H1 and first paragraph
+- "download pinterest videos" — in How-To section
+- "pinterest to mp4" — in features/formats section
+- "pinterest gif downloader" — in features section
+- "save pinterest video without watermark" — in trust/features section
+- "pinterest video downloader online free" — in FAQ answer
+- "download pinterest video on iphone" — in platform section
+- "download pinterest video on android" — in platform section
+- "pinterest to mp3 converter" — in features section
+
+Word count targets:
+- Homepage: minimum 1,200 words of visible, crawlable text
+- Sub-pages: minimum 600 words each
+
+---
+
+## PART 15 — PAGE SPEED CHECKLIST
+
+In Replit's `package.json` or build config, ensure:
+
+```json
+{
+  "dependencies": {
+    "compression": "^1.7.4",
+    "helmet": "^7.0.0"
+  }
+}
+```
+
+Use `helmet` for security headers:
+```js
+const helmet = require('helmet');
+app.use(helmet({
+  contentSecurityPolicy: false // enable and configure properly once site is stable
+}));
+```
+
+Additional optimizations:
+- Minify all CSS and JS before serving (use `terser` for JS, `clean-css` for CSS)
+- Serve fonts locally (download Google Fonts WOFF2 files and self-host)
+- Use `font-display: swap` on all @font-face declarations
+- Enable HTTP/2 if your Replit deployment supports it
+- Set `<meta name="theme-color" content="#E8003D">` for mobile browser chrome color
+
+---
+
+## PART 16 — GOOGLE ANALYTICS & SEARCH CONSOLE
+
+Add Google Analytics 4 tracking (replace G-XXXXXXXX with your real ID):
+```html
+<!-- Google Analytics 4 — load async, after page content -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXX', { anonymize_ip: true });
+</script>
+```
+
+After deploying:
+1. Go to Google Search Console → Add Property → enter your domain
+2. Verify via HTML tag method (add `<meta name="google-site-verification" content="YOUR_CODE" />`)
+3. Submit your sitemap URL: `https://YOUR-DOMAIN.com/sitemap.xml`
+4. Request indexing for all pages
+
+---
+
+## PART 17 — FINAL VERIFICATION CHECKLIST
+
+After implementing everything above, verify using these free tools:
+
+| Tool | URL | Check |
+|------|-----|-------|
+| Google Rich Results Test | search.google.com/test/rich-results | All schema types pass |
+| PageSpeed Insights | pagespeed.web.dev | Score 90+ mobile & desktop |
+| Mobile-Friendly Test | search.google.com/test/mobile-friendly | Pass |
+| Open Graph Debugger | developers.facebook.com/tools/debug | OG tags display correctly |
+| Twitter Card Validator | cards-dev.twitter.com/validator | Card renders |
+| Ahrefs Webmaster Tools | ahrefs.com/webmaster-tools | No crawl errors |
+| Screaming Frog | screamingfrog.co.uk | 0 broken links, 0 missing H1s |
+| W3C Validator | validator.w3.org | No critical HTML errors |
+| SecurityHeaders.com | securityheaders.com | Grade A or A+ |
+
+---
+
+## SUMMARY OF FILES TO CREATE/MODIFY
+
+| File | Action |
+|------|--------|
+| `server.js` / `index.js` | Add SSR, headers, compression, all routes |
+| `views/index.html` | Full meta tags, all JSON-LD schemas, semantic HTML |
+| `views/gif-downloader.html` | New sub-page |
+| `views/image-downloader.html` | New sub-page |
+| `views/mp3-converter.html` | New sub-page |
+| `views/how-to.html` | New guide page |
+| `views/404.html` | Custom error page |
+| `public/robots.txt` | New file |
+| `public/sitemap.xml` | New file |
+| `public/manifest.json` | New PWA manifest |
+| `public/sitemap-images.xml` | New image sitemap |
+| `public/favicon.svg` | SVG favicon |
+
+---
+
+*Replace all instances of `https://YOUR-DOMAIN.com` with your actual live domain before deploying.*
+*Replace `G-XXXXXXXX` with your actual Google Analytics 4 Measurement ID.*

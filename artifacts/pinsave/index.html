@@ -2,44 +2,152 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
     <title>PinSavePro – Free Pinterest Video Downloader | HD, 4K, MP4, MP3</title>
     <meta name="description" content="Download Pinterest videos, images, GIFs, and Reels for free in HD, 2K, and 4K. No login required. Works on Android, iPhone, and desktop. Fast, safe, and 100% free." />
-    <meta name="keywords" content="pinterest video downloader, download pinterest videos, pinterest to mp4, pinterest gif downloader, pinterest image downloader, save pinterest video" />
-    
+    <meta name="keywords" content="pinterest video downloader, download pinterest videos, pinterest to mp4, save pinterest video, pinterest gif downloader, pinterest image downloader, pinterest downloader online, pinterest video download without watermark, pinterest to mp3" />
+    <meta name="author" content="PinSavePro" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
+    <link rel="canonical" href="https://pinterest-video-grabber--irfanarif1984.replit.app/" />
+
     <!-- Open Graph -->
-    <meta property="og:title" content="PinSavePro – Free Pinterest Video Downloader" />
-    <meta property="og:description" content="Download Pinterest videos, GIFs, and images in HD for free. No login. No watermark." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://pinsave.io" />
-    <meta property="og:image" content="https://pinsave.io/og-image.jpg" />
+    <meta property="og:url" content="https://pinterest-video-grabber--irfanarif1984.replit.app/" />
+    <meta property="og:title" content="PinSavePro – Free Pinterest Video Downloader" />
+    <meta property="og:description" content="Download Pinterest videos, GIFs and images for free in HD. No login, no watermark." />
+    <meta property="og:image" content="https://pinterest-video-grabber--irfanarif1984.replit.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="PinSavePro Pinterest Video Downloader" />
+    <meta property="og:site_name" content="PinSavePro" />
+    <meta property="og:locale" content="en_US" />
 
-    <!-- Twitter -->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@PinSavePro" />
+    <meta name="twitter:creator" content="@PinSavePro" />
     <meta name="twitter:title" content="PinSavePro – Free Pinterest Video Downloader" />
-    <meta name="twitter:description" content="Download Pinterest videos, GIFs, and images in HD for free. No login. No watermark." />
-    <meta name="twitter:image" content="https://pinsave.io/og-image.jpg" />
+    <meta name="twitter:description" content="Download Pinterest videos, GIFs and images for free in HD. No login, no watermark." />
+    <meta name="twitter:image" content="https://pinterest-video-grabber--irfanarif1984.replit.app/og-image.jpg" />
+    <meta name="twitter:image:alt" content="PinSavePro Pinterest Video Downloader" />
 
-    <link rel="canonical" href="https://pinsave.io" />
+    <!-- Hreflang -->
+    <link rel="alternate" hreflang="en" href="https://pinterest-video-grabber--irfanarif1984.replit.app/" />
+    <link rel="alternate" hreflang="x-default" href="https://pinterest-video-grabber--irfanarif1984.replit.app/" />
+
+    <!-- PWA / Web App -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#E8003D" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PinSavePro" />
+    <meta name="application-name" content="PinSavePro" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.svg" />
 
-    <!-- JSON-LD -->
+    <!-- Performance Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="//i.pinimg.com" />
+    <link rel="dns-prefetch" href="//widgets.pinterest.com" />
+    <link rel="preload" as="image" href="/og-image.jpg" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- JSON-LD: WebApplication -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "PinSavePro Pinterest Video Downloader",
-      "url": "https://pinsave.io",
-      "description": "Free online tool to download Pinterest videos, images, and GIFs in HD quality without watermark.",
+      "url": "https://pinterest-video-grabber--irfanarif1984.replit.app/",
+      "description": "Free online tool to download Pinterest videos, images, and GIFs in HD, 2K, and 4K quality without watermark. No login required.",
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "featureList": ["HD Video Download", "GIF Download", "Image Download", "MP3 Conversion", "No Watermark", "No Login Required"]
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "15420",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "featureList": [
+        "HD Video Download up to 4K",
+        "GIF Download",
+        "Image Download",
+        "MP3 Audio Extraction",
+        "No Watermark",
+        "No Login Required",
+        "Works on Mobile and Desktop"
+      ],
+      "screenshot": "https://pinterest-video-grabber--irfanarif1984.replit.app/og-image.jpg",
+      "author": {
+        "@type": "Organization",
+        "name": "PinSavePro",
+        "url": "https://pinterest-video-grabber--irfanarif1984.replit.app/"
+      }
     }
     </script>
+
+    <!-- JSON-LD: Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "PinSavePro",
+      "url": "https://pinterest-video-grabber--irfanarif1984.replit.app/",
+      "logo": "https://pinterest-video-grabber--irfanarif1984.replit.app/favicon.svg",
+      "sameAs": [],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "availableLanguage": ["English"]
+      }
+    }
+    </script>
+
+    <!-- JSON-LD: WebSite + SearchAction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "PinSavePro",
+      "url": "https://pinterest-video-grabber--irfanarif1984.replit.app/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://pinterest-video-grabber--irfanarif1984.replit.app/?url={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- JSON-LD: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://pinterest-video-grabber--irfanarif1984.replit.app/" }
+      ]
+    }
+    </script>
+
+    <!-- JSON-LD: FAQPage -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -48,62 +156,183 @@
         {
           "@type": "Question",
           "name": "How do I download a Pinterest video?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Copy the Pinterest video URL, paste it into the PinSavePro input box, and click Download. Your video will be ready in seconds." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Copy the Pinterest video URL (tap the share icon and select Copy Link in the app), paste it into the PinSavePro input box, and click Download. Your video will be ready in seconds and no login is required." }
         },
         {
           "@type": "Question",
           "name": "Is PinSavePro free to use?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes, PinSavePro is completely free with no registration or login required." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes, PinSavePro is 100% free to use. No subscription, no premium tier, and no registration required." }
         },
         {
           "@type": "Question",
           "name": "Does PinSavePro work on iPhone and Android?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes, PinSavePro is fully optimized for mobile browsers on both iOS and Android devices." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. PinSavePro works on all mobile browsers including Safari on iPhone and Chrome on Android. No app install needed." }
         },
         {
           "@type": "Question",
-          "name": "What formats does PinSavePro support?",
-          "acceptedAnswer": { "@type": "Answer", "text": "PinSavePro supports MP4 video, MP3 audio, GIF, and all major image formats including JPG, PNG, and WebP." }
+          "name": "What formats and qualities are supported?",
+          "acceptedAnswer": { "@type": "Answer", "text": "PinSavePro supports MP4 video in HD (720p), Full HD (1080p), 2K, and 4K where available. It also supports MP3 audio extraction, GIF downloads, and image downloads in JPG, PNG, and WebP." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I download Pinterest GIFs and images too?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. PinSavePro supports video pins, GIF pins, image pins, Idea Pins, and Pinterest Reels — all from the same input box." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does PinSavePro store my downloaded files?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. PinSavePro does not store any files on its servers. All content is streamed directly from Pinterest's CDN to your device." }
+        },
+        {
+          "@type": "Question",
+          "name": "Where are downloaded files saved on my device?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Files are saved to your browser's default Downloads folder. On desktop press Ctrl+J (Windows) or Cmd+J (Mac) to view downloads. On iPhone files may go to the Files app first." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I convert Pinterest video to MP3?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. After pasting a Pinterest video URL, choose the MP3 option from the download buttons to extract and save only the audio track." }
         }
       ]
     }
     </script>
+
+    <!-- JSON-LD: HowTo -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "HowTo",
       "name": "How to Download Pinterest Videos",
+      "description": "Download any Pinterest video, GIF, or image for free in HD using PinSavePro.",
+      "totalTime": "PT1M",
+      "tool": [{ "@type": "HowToTool", "name": "PinSavePro" }],
       "step": [
         {
           "@type": "HowToStep",
-          "text": "Find a video on Pinterest and copy its link."
+          "position": "1",
+          "name": "Copy the Pinterest Link",
+          "text": "Open Pinterest and find the video. Tap the share icon and select Copy Link. On desktop, copy the URL from the browser address bar."
         },
         {
           "@type": "HowToStep",
-          "text": "Paste the link into the PinSavePro search bar and click Download."
+          "position": "2",
+          "name": "Paste the URL into PinSavePro",
+          "text": "Go to PinSavePro and paste the copied Pinterest URL into the download input box."
         },
         {
           "@type": "HowToStep",
-          "text": "Choose your desired format and quality, then save the file to your device."
+          "position": "3",
+          "name": "Choose Quality and Download",
+          "text": "Click the Download button. Select your preferred quality (HD, 2K, 4K, or MP3) and the file will save to your device."
         }
       ]
     }
     </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [{
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://pinsave.io"
-      }]
-    }
-    </script>
+
+    <style>
+      .skip-link { position: absolute; left: -9999px; top: 0; z-index: 9999; padding: 12px 16px; background: #E8003D; color: #fff; font: 600 14px/1 system-ui, sans-serif; text-decoration: none; border-radius: 0 0 8px 0; }
+      .skip-link:focus { left: 0; }
+      #seo-prerender { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div id="root">
+      <!-- Server-readable prerendered SEO content. React replaces this on hydration. -->
+      <div id="seo-prerender" aria-hidden="true">
+        <header role="banner">
+          <nav aria-label="Main navigation">
+            <a href="/">PinSavePro – Pinterest Video Downloader</a>
+            <a href="#how-to">How To</a>
+            <a href="#features">Features</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+        </header>
+        <main role="main" id="main-content">
+          <section aria-labelledby="hero-heading">
+            <h1 id="hero-heading">Pinterest Video Downloader – Free, HD, 4K, No Watermark</h1>
+            <p>PinSavePro is the fastest free online <strong>Pinterest video downloader</strong>. Save Pinterest videos, GIFs, images, Idea Pins, and Reels in HD, 2K, and 4K quality without any watermark. No login, no app install, and no registration required. Works on iPhone, Android, Windows, Mac, and Linux directly from your browser.</p>
+            <p>Just paste a Pinterest pin link or pin.it short URL into the box above, click Download, and pick your preferred quality. PinSavePro pulls the original media file straight from Pinterest's CDN and saves it to your device — clean, fast, and free forever.</p>
+          </section>
+
+          <section aria-labelledby="howto-heading" id="how-to">
+            <h2 id="howto-heading">How to Download Pinterest Videos</h2>
+            <ol>
+              <li><strong>Copy the Pinterest link.</strong> Open the Pinterest app, tap the share icon on a video or pin, and select Copy Link. On desktop, just copy the URL from the address bar.</li>
+              <li><strong>Paste it into PinSavePro.</strong> Open PinSavePro and paste the URL into the search box at the top of the page.</li>
+              <li><strong>Choose your quality and download.</strong> Pick MP4 (720p, 1080p, 2K, or 4K), MP3 audio, GIF, or original image. The file saves to your device's Downloads folder.</li>
+            </ol>
+            <p>The whole process takes about 10 seconds. PinSavePro never stores your files and never adds a watermark.</p>
+          </section>
+
+          <section aria-labelledby="formats-heading" id="formats">
+            <h2 id="formats-heading">Supported Formats and Qualities</h2>
+            <ul>
+              <li><strong>MP4 video</strong> in 720p, 1080p, 2K, and 4K (whatever the original pin offers)</li>
+              <li><strong>MP3 audio</strong> extracted from any Pinterest video — perfect for saving sound from a Pinterest Reel</li>
+              <li><strong>Animated GIF</strong> downloads from Pinterest GIF pins</li>
+              <li><strong>JPG, PNG, and WebP image</strong> downloads in the original Pinterest resolution</li>
+              <li><strong>Idea Pins and Pinterest Reels</strong> — full multi-page Idea Pin support</li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="devices-heading">
+            <h2 id="devices-heading">Works on Every Device</h2>
+            <p>Use PinSavePro to <strong>download Pinterest videos on iPhone</strong>, Android, iPad, Windows PC, Mac, and Linux. There is no app to install — everything runs in your browser. iOS users: tap and hold the download button to save the file directly to the Files app or Photos. Android users: the file goes straight to your Downloads folder.</p>
+          </section>
+
+          <section aria-labelledby="features-heading" id="features">
+            <h2 id="features-heading">Why Choose PinSavePro?</h2>
+            <ul>
+              <li>HD and 4K video resolution — the highest quality Pinterest exposes</li>
+              <li>No watermarks — the original file, untouched</li>
+              <li>No login, no signup, no email — completely anonymous</li>
+              <li>No annoying popups or fake download buttons</li>
+              <li>Lightning-fast extraction with our optimized backend</li>
+              <li>Free forever — no premium tier, no paywall</li>
+              <li>Works on every browser and every device</li>
+              <li>Privacy-respecting — we don't track your downloads</li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="usecases-heading">
+            <h2 id="usecases-heading">Who Uses PinSavePro?</h2>
+            <p>Content creators use PinSavePro to <strong>save Pinterest video without watermark</strong> for moodboards, TikToks, and Reels. Marketers archive competitor ad creatives and product photography. Designers build inspiration libraries from Pinterest's massive visual catalog. Educators and students download infographics and how-to videos for offline study. Anyone who's frustrated with Pinterest not providing a download button uses PinSavePro to grab the content they love.</p>
+          </section>
+
+          <section aria-labelledby="faq-heading" id="faq">
+            <h2 id="faq-heading">Frequently Asked Questions</h2>
+            <h3>How do I download a Pinterest video?</h3>
+            <p>Copy the Pinterest video URL, paste it into the PinSavePro input box, and click Download. The video downloads in seconds.</p>
+            <h3>Is PinSavePro really free?</h3>
+            <p>Yes. PinSavePro is a 100% free <strong>pinterest video downloader online free</strong> tool. No subscription, no signup, no limits.</p>
+            <h3>Does PinSavePro work on iPhone and Android?</h3>
+            <p>Yes. <strong>Download pinterest video on iPhone</strong> using Safari and <strong>download pinterest video on Android</strong> using Chrome — both work directly from the browser.</p>
+            <h3>What formats are supported?</h3>
+            <p>MP4 (HD/2K/4K), MP3 audio, GIF, and all major image formats including JPG, PNG, and WebP.</p>
+            <h3>Can I use PinSavePro as a Pinterest GIF downloader?</h3>
+            <p>Yes — paste any animated Pinterest pin URL and our <strong>pinterest gif downloader</strong> grabs the original GIF file.</p>
+            <h3>Is there a Pinterest to MP3 converter built in?</h3>
+            <p>Yes — our <strong>pinterest to mp3 converter</strong> extracts the audio track from any Pinterest video.</p>
+          </section>
+
+          <nav aria-label="Other PinSavePro tools">
+            <h2>Related Tools</h2>
+            <ul>
+              <li><a href="/pinterest-gif-downloader">Pinterest GIF Downloader</a></li>
+              <li><a href="/pinterest-image-downloader">Pinterest Image Downloader</a></li>
+              <li><a href="/pinterest-to-mp3">Pinterest to MP3 Converter</a></li>
+              <li><a href="/how-to-download-pinterest-videos">How to Download Pinterest Videos (Guide)</a></li>
+            </ul>
+          </nav>
+        </main>
+        <footer role="contentinfo">
+          <p>© PinSavePro. PinSavePro is an independent service and is not affiliated with, endorsed by, or sponsored by Pinterest.</p>
+        </footer>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

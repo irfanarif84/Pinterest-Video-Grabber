@@ -1,8 +1,36 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+
+function securityHeadersPlugin(): Plugin {
+  const headers: Record<string, string> = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "SAMEORIGIN",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "geolocation=(), microphone=(), camera=(), payment=(), usb=()",
+    "X-XSS-Protection": "1; mode=block",
+  };
+  const apply = (res: { setHeader: (n: string, v: string) => void }) => {
+    for (const [k, v] of Object.entries(headers)) res.setHeader(k, v);
+  };
+  return {
+    name: "pinsave-security-headers",
+    configureServer(server) {
+      server.middlewares.use((_req, res, next) => {
+        apply(res);
+        next();
+      });
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use((_req, res, next) => {
+        apply(res);
+        next();
+      });
+    },
+  };
+}
 
 const rawPort = process.env.PORT;
 
@@ -32,6 +60,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),
+    securityHeadersPlugin(),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
       ? [

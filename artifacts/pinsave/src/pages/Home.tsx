@@ -1,35 +1,27 @@
 import { motion } from "framer-motion";
 import { 
-  Download, Sparkles, Zap, Shield, Image as ImageIcon, CheckCircle, Video, Music, 
+  Sparkles, Zap, Shield, Image as ImageIcon, CheckCircle, Video, Music, 
   Smartphone, Apple, Monitor, Laptop, Check, X, Users, Briefcase, GraduationCap 
 } from "lucide-react";
+import { Link } from "wouter";
 import DownloaderForm from "@/components/DownloaderForm";
 import FAQ from "@/components/FAQ";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
+import { usePageSEO } from "@/lib/seo";
 
 export default function Home() {
+  usePageSEO({
+    title: "PinSavePro – Free Pinterest Video Downloader | HD, 4K, MP4, MP3",
+    description: "Download Pinterest videos, images, GIFs, and Reels for free in HD, 2K, and 4K. No login required. Works on Android, iPhone, and desktop.",
+    canonical: "/",
+  });
+
   return (
     <div className="min-h-screen bg-background flex flex-col relative selection:bg-primary/30">
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-12 h-16 bg-background/80 backdrop-blur-xl border-b border-border/40">
-        <a href="/" className="flex items-center gap-2 font-display font-bold text-xl tracking-tight">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground shadow-[0_0_15px_rgba(232,0,61,0.5)]">
-            <Download size={18} strokeWidth={2.5} />
-          </div>
-          Pin<span className="text-primary">SavePro</span>
-        </a>
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
-          <a href="#how-to" className="hover:text-foreground transition-colors">How To</a>
-          <a href="#features" className="hover:text-foreground transition-colors">Features</a>
-          <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">
-            100% Free
-          </div>
-        </div>
-      </nav>
+      <SiteHeader />
 
-      <main className="flex-1 w-full overflow-hidden">
+      <main className="flex-1 w-full overflow-hidden" id="main-content">
         {/* HERO SECTION */}
         <section className="relative w-full pt-20 pb-32 px-4 flex flex-col items-center text-center">
           <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/10 blur-[100px] rounded-full pointer-events-none" />
@@ -323,50 +315,40 @@ export default function Home() {
           </div>
           <FAQ />
         </section>
+        {/* INTERNAL LINKING — KEYWORD CLUSTERS */}
+        <section className="py-16 px-6 bg-card/20 border-y border-border/30">
+          <div className="max-w-6xl mx-auto text-center">
+            <h2 className="font-display text-3xl font-bold mb-4">Explore Our Other Tools</h2>
+            <p className="text-muted-foreground mb-10 max-w-2xl mx-auto">
+              PinSavePro is a full suite of free Pinterest utilities. Pick the one that matches what you're saving.
+            </p>
+            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+              <Link href="/pinterest-gif-downloader" className="bg-background border border-border rounded-2xl p-6 hover:border-primary/40 transition-colors">
+                <ImageIcon className="text-primary mb-3 mx-auto" size={28} />
+                <div className="font-bold mb-1">GIF Downloader</div>
+                <div className="text-xs text-muted-foreground">Save animated Pinterest GIFs</div>
+              </Link>
+              <Link href="/pinterest-image-downloader" className="bg-background border border-border rounded-2xl p-6 hover:border-primary/40 transition-colors">
+                <ImageIcon className="text-blue-400 mb-3 mx-auto" size={28} />
+                <div className="font-bold mb-1">Image Downloader</div>
+                <div className="text-xs text-muted-foreground">Save Pinterest images in HD</div>
+              </Link>
+              <Link href="/pinterest-to-mp3" className="bg-background border border-border rounded-2xl p-6 hover:border-primary/40 transition-colors">
+                <Music className="text-accent mb-3 mx-auto" size={28} />
+                <div className="font-bold mb-1">Pinterest to MP3</div>
+                <div className="text-xs text-muted-foreground">Extract audio from Pinterest videos</div>
+              </Link>
+              <Link href="/how-to-download-pinterest-videos" className="bg-background border border-border rounded-2xl p-6 hover:border-primary/40 transition-colors">
+                <Video className="text-yellow-500 mb-3 mx-auto" size={28} />
+                <div className="font-bold mb-1">How-To Guide</div>
+                <div className="text-xs text-muted-foreground">Step-by-step tutorial</div>
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
 
-      {/* FOOTER */}
-      <footer className="border-t border-border bg-card/50 pt-16 pb-8 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            <div className="md:col-span-2">
-              <a href="/" className="flex items-center gap-2 font-display font-bold text-xl mb-4">
-                <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center text-primary-foreground">
-                  <Download size={14} strokeWidth={2.5} />
-                </div>
-                Pin<span className="text-primary">SavePro</span>
-              </a>
-              <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-                The fastest, most reliable tool to download videos, images, and GIFs from Pinterest for free.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Tools</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Pinterest Video Downloader</a></li>
-                <li><a href="#" className="hover:text-foreground">Pinterest Image Downloader</a></li>
-                <li><a href="#" className="hover:text-foreground">Pinterest GIF Downloader</a></li>
-                <li><a href="#" className="hover:text-foreground">Pinterest to MP3</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Legal & About</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">About Us</a></li>
-                <li><a href="#" className="hover:text-foreground">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-foreground">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-foreground">Contact Support</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="pt-8 border-t border-border/50 text-center md:text-left text-xs text-muted-foreground flex flex-col md:flex-row justify-between items-center gap-4">
-            <p>© {new Date().getFullYear()} PinSavePro. All rights reserved.</p>
-            <p className="max-w-xl text-center md:text-right opacity-60">
-              Disclaimer: PinSavePro is an independent service and is not affiliated with, endorsed by, or sponsored by Pinterest. We respect intellectual property rights and ask users to download only content they have permission to use.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
