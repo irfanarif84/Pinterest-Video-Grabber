@@ -16,30 +16,75 @@ export default function GifDownloader() {
   });
 
   useEffect(() => {
-    const id = "ld-gif-page";
-    if (document.getElementById(id)) return;
-    const script = document.createElement("script");
-    script.id = id;
-    script.type = "application/ld+json";
-    script.text = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: "Pinterest GIF Downloader",
-      description:
-        "Free tool to download animated GIFs from Pinterest without watermark.",
-      url: `${ORIGIN_URL}/pinterest-gif-downloader`,
-      breadcrumb: {
+    const schemas = [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: "Pinterest GIF Downloader",
+        description:
+          "Free tool to download animated GIFs from Pinterest without watermark.",
+        url: `${ORIGIN_URL}/pinterest-gif-downloader`,
+        isPartOf: {
+          "@type": "WebSite",
+          name: "PinSavePro",
+          url: ORIGIN_URL,
+        },
+      },
+      {
+        "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: ORIGIN_URL + "/" },
-          { "@type": "ListItem", position: 2, name: "Pinterest GIF Downloader", item: ORIGIN_URL + "/pinterest-gif-downloader" },
+          { "@type": "ListItem", position: 1, name: "Home", item: `${ORIGIN_URL}/` },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Pinterest GIF Downloader",
+            item: `${ORIGIN_URL}/pinterest-gif-downloader`,
+          },
         ],
       },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "Does Pinterest support GIF pins?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. Pinterest supports animated GIF pins, and PinSavePro extracts them in original .gif format with full animation preserved.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Why does my downloaded GIF play as a video?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Some Pinterest GIFs are actually short MP4 clips. PinSavePro saves the original format Pinterest serves — which may be MP4 for newer pins.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Can I download GIFs on iPhone?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. Use Safari, paste the link, and the GIF saves to your Files app or Photos library.",
+            },
+          },
+        ],
+      },
+    ];
+    const ids = schemas.map((s, i) => {
+      const id = `ld-gif-${i}`;
+      if (document.getElementById(id)) return id;
+      const el = document.createElement("script");
+      el.id = id;
+      el.type = "application/ld+json";
+      el.text = JSON.stringify(s);
+      document.head.appendChild(el);
+      return id;
     });
-    document.head.appendChild(script);
-    return () => {
-      document.getElementById(id)?.remove();
-    };
+    return () => ids.forEach((id) => document.getElementById(id)?.remove());
   }, []);
 
   return (

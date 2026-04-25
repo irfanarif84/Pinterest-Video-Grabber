@@ -16,37 +16,152 @@ export default function HowToGuide() {
   });
 
   useEffect(() => {
-    const id = "ld-howto-article";
-    if (document.getElementById(id)) return;
-    const script = document.createElement("script");
-    script.id = id;
-    script.type = "application/ld+json";
-    script.text = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: "How to Download Pinterest Videos in 2026",
-      description:
-        "Step-by-step guide to downloading Pinterest videos on iPhone, Android, and desktop.",
-      author: { "@type": "Organization", name: "PinSavePro" },
-      publisher: {
-        "@type": "Organization",
-        name: "PinSavePro",
-        logo: {
-          "@type": "ImageObject",
-          url: `${ORIGIN_URL}/favicon.svg`,
+    const schemas = [
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "How to Download Pinterest Videos in 2026",
+        description:
+          "Step-by-step guide to downloading Pinterest videos on iPhone, Android, and desktop.",
+        author: { "@type": "Organization", name: "PinSavePro" },
+        publisher: {
+          "@type": "Organization",
+          name: "PinSavePro",
+          logo: {
+            "@type": "ImageObject",
+            url: `${ORIGIN_URL}/favicon.svg`,
+          },
         },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": `${ORIGIN_URL}/how-to-download-pinterest-videos`,
+        },
+        image: `${ORIGIN_URL}/og-image.jpg`,
+        datePublished: "2026-04-25",
+        dateModified: "2026-04-25",
       },
-      mainEntityOfPage: {
-        "@type": "WebPage",
-        "@id": `${ORIGIN_URL}/how-to-download-pinterest-videos`,
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${ORIGIN_URL}/` },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "How to Download Pinterest Videos",
+            item: `${ORIGIN_URL}/how-to-download-pinterest-videos`,
+          },
+        ],
       },
-      datePublished: "2026-04-25",
-      dateModified: "2026-04-25",
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name: "How to Download Pinterest Videos in 2026",
+        description:
+          "Complete guide for downloading Pinterest videos on iPhone, Android, Windows, and Mac.",
+        totalTime: "PT2M",
+        estimatedCost: {
+          "@type": "MonetaryAmount",
+          currency: "USD",
+          value: "0",
+        },
+        supply: [{ "@type": "HowToSupply", name: "Pinterest video URL" }],
+        tool: [{ "@type": "HowToTool", name: "PinSavePro" }],
+        step: [
+          {
+            "@type": "HowToSection",
+            name: "Download on iPhone",
+            itemListElement: [
+              {
+                "@type": "HowToStep",
+                position: 1,
+                name: "Copy the link in Pinterest app",
+                text: "Open Pinterest, tap the share icon on the video, and select Copy Link.",
+                image: `${ORIGIN_URL}/og-image.jpg`,
+              },
+              {
+                "@type": "HowToStep",
+                position: 2,
+                name: "Paste in Safari and download",
+                text: "Open Safari, go to PinSavePro, paste the link, tap Download, then choose Save to Files or Photos.",
+                image: `${ORIGIN_URL}/og-image.jpg`,
+              },
+            ],
+          },
+          {
+            "@type": "HowToSection",
+            name: "Download on Android",
+            itemListElement: [
+              {
+                "@type": "HowToStep",
+                position: 1,
+                name: "Copy the link in Pinterest app",
+                text: "Open Pinterest, tap the three-dot menu on the video, and select Copy Link.",
+                image: `${ORIGIN_URL}/og-image.jpg`,
+              },
+              {
+                "@type": "HowToStep",
+                position: 2,
+                name: "Paste in Chrome and download",
+                text: "Open Chrome, visit PinSavePro, paste the URL, and tap Download. The video saves to your Downloads folder.",
+                image: `${ORIGIN_URL}/og-image.jpg`,
+              },
+            ],
+          },
+          {
+            "@type": "HowToSection",
+            name: "Download on Windows",
+            itemListElement: [
+              {
+                "@type": "HowToStep",
+                position: 1,
+                name: "Copy the URL from pinterest.com",
+                text: "Open pinterest.com in your browser, go to the video pin, and copy the URL from the address bar.",
+                image: `${ORIGIN_URL}/og-image.jpg`,
+              },
+              {
+                "@type": "HowToStep",
+                position: 2,
+                name: "Paste in PinSavePro and choose quality",
+                text: "Open PinSavePro, paste the URL, click Download, and pick HD, 2K, 4K, or MP3. Press Ctrl+J to view downloads.",
+                image: `${ORIGIN_URL}/og-image.jpg`,
+              },
+            ],
+          },
+          {
+            "@type": "HowToSection",
+            name: "Download on Mac",
+            itemListElement: [
+              {
+                "@type": "HowToStep",
+                position: 1,
+                name: "Copy the URL from Safari or Chrome",
+                text: "Open pinterest.com on your Mac, go to the video, and copy the URL from the address bar.",
+                image: `${ORIGIN_URL}/og-image.jpg`,
+              },
+              {
+                "@type": "HowToStep",
+                position: 2,
+                name: "Paste in PinSavePro and download",
+                text: "Open PinSavePro, paste the URL, click Download, and pick your quality. Press Cmd+J to view your downloads.",
+                image: `${ORIGIN_URL}/og-image.jpg`,
+              },
+            ],
+          },
+        ],
+      },
+    ];
+    const ids = schemas.map((s, i) => {
+      const id = `ld-howto-${i}`;
+      if (document.getElementById(id)) return id;
+      const el = document.createElement("script");
+      el.id = id;
+      el.type = "application/ld+json";
+      el.text = JSON.stringify(s);
+      document.head.appendChild(el);
+      return id;
     });
-    document.head.appendChild(script);
-    return () => {
-      document.getElementById(id)?.remove();
-    };
+    return () => ids.forEach((id) => document.getElementById(id)?.remove());
   }, []);
 
   return (

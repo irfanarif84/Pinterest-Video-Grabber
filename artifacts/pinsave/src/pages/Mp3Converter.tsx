@@ -16,30 +16,75 @@ export default function Mp3Converter() {
   });
 
   useEffect(() => {
-    const id = "ld-mp3-page";
-    if (document.getElementById(id)) return;
-    const script = document.createElement("script");
-    script.id = id;
-    script.type = "application/ld+json";
-    script.text = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: "Pinterest to MP3 Converter",
-      description:
-        "Free tool to extract MP3 audio from Pinterest videos and Reels.",
-      url: `${ORIGIN_URL}/pinterest-to-mp3`,
-      breadcrumb: {
+    const schemas = [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: "Pinterest to MP3 Converter",
+        description:
+          "Free tool to extract MP3 audio from Pinterest videos and Reels.",
+        url: `${ORIGIN_URL}/pinterest-to-mp3`,
+        isPartOf: {
+          "@type": "WebSite",
+          name: "PinSavePro",
+          url: ORIGIN_URL,
+        },
+      },
+      {
+        "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: ORIGIN_URL + "/" },
-          { "@type": "ListItem", position: 2, name: "Pinterest to MP3", item: ORIGIN_URL + "/pinterest-to-mp3" },
+          { "@type": "ListItem", position: 1, name: "Home", item: `${ORIGIN_URL}/` },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Pinterest to MP3",
+            item: `${ORIGIN_URL}/pinterest-to-mp3`,
+          },
         ],
       },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "Can I extract audio from any Pinterest video?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "As long as the pin contains a video stream (Reel, Idea Pin, or video pin), PinSavePro can extract its audio as MP3.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "What's the audio quality?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "PinSavePro extracts the original audio track from Pinterest, so quality matches whatever the creator uploaded — typically AAC at 128–192 kbps converted to MP3.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Is it legal to download Pinterest audio?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Downloading for personal listening is generally fine. Music tracks remain copyrighted to their owners — don't redistribute or use commercially without a license.",
+            },
+          },
+        ],
+      },
+    ];
+    const ids = schemas.map((s, i) => {
+      const id = `ld-mp3-${i}`;
+      if (document.getElementById(id)) return id;
+      const el = document.createElement("script");
+      el.id = id;
+      el.type = "application/ld+json";
+      el.text = JSON.stringify(s);
+      document.head.appendChild(el);
+      return id;
     });
-    document.head.appendChild(script);
-    return () => {
-      document.getElementById(id)?.remove();
-    };
+    return () => ids.forEach((id) => document.getElementById(id)?.remove());
   }, []);
 
   return (
