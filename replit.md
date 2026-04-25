@@ -25,3 +25,14 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - `pnpm --filter @workspace/api-server run dev` — run API server locally
 
 See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.
+
+## Artifacts
+
+- **artifacts/api-server** — Express API (Pinterest extractor at `/api/pinterest`).
+- **artifacts/pinsave** — PinSavePro Vite SPA (Pinterest video downloader). Wouter routing.
+  - Routes: `/`, `/pinterest-gif-downloader`, `/pinterest-image-downloader`, `/pinterest-to-mp3`, `/how-to-download-pinterest-videos`, 404.
+  - SEO: full meta + 6 JSON-LD schemas (WebApplication, Organization, WebSite SearchAction, BreadcrumbList, FAQPage, HowTo) in `index.html`, prerendered SEO content in `#seo-prerender` div for crawlers, `usePageSEO` hook in `src/lib/seo.ts` for per-route head swap.
+  - Static SEO files in `public/`: `robots.txt`, `sitemap.xml`, `sitemap-images.xml`, `manifest.json`, `og-image.jpg`, `favicon.svg`.
+  - Security headers via `securityHeadersPlugin` in `vite.config.ts` (X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy, X-XSS-Protection).
+  - Shared `SiteHeader` and `SiteFooter` components with internal links to all sub-pages.
+- **artifacts/mockup-sandbox** — Canvas/component preview server.

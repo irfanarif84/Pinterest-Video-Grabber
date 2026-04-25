@@ -4,6 +4,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
+import GifDownloader from "@/pages/GifDownloader";
+import ImageDownloader from "@/pages/ImageDownloader";
+import Mp3Converter from "@/pages/Mp3Converter";
+import HowToGuide from "@/pages/HowToGuide";
 
 const queryClient = new QueryClient();
 
@@ -11,6 +15,10 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/pinterest-gif-downloader" component={GifDownloader} />
+      <Route path="/pinterest-image-downloader" component={ImageDownloader} />
+      <Route path="/pinterest-to-mp3" component={Mp3Converter} />
+      <Route path="/how-to-download-pinterest-videos" component={HowToGuide} />
       <Route component={NotFound} />
     </Switch>
   );

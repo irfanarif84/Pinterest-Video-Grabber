@@ -1,0 +1,27 @@
+{
+  "name": "PinSavePro – Pinterest Video Downloader",
+  "short_name": "PinSavePro",
+  "description": "Download Pinterest videos, GIFs, images, and Reels for free in HD, 2K and 4K quality. No login, no watermark.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#E8003D",
+  "orientation": "portrait-primary",
+  "lang": "en-US",
+  "dir": "ltr",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "categories": ["utilities", "productivity", "social"],
+  "screenshots": [
+    {
+      "src": "/og-image.jpg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "PinSavePro Pinterest Video Downloader"
+    }
+  ]
+}
