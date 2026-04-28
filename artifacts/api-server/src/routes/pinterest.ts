@@ -329,6 +329,44 @@ async function probeMp4Variants(
   return out;
 }
 
+// Last-resort: scan the raw HTML for any Pinterest video URLs
+// (expMp4 direct MP4s, or HLS playlists from which we derive MP4s).
+// Used when the JSON pin object only had images — common for private/sent
+// shares where Pinterest strips video data from the anonymous-viewer JSON
+// but still leaves the video URLs embedded elsewhere in the page.
+async function scrapeVideosFromHtml(html: string): Promise<Record<string, VideoEntry>> {
+  const out: Record<string, VideoEntry> = {};
+
+  // 1. Direct expMp4 URLs like .../videos/iht/expMp4/<a>/<b>/<c>/<hash>_720w.mp4
+  const mp4Matches = new Set<string>();
+  for (const m of html.matchAll(/https?:\/\/[^"'\s<>]+\/videos\/[^"'\s<>]+_(\d{3,4})w\.mp4/gi)) {
+    mp4Matches.add(m[0]);
+  }
+  for (const url of mp4Matches) {
+    const wMatch = url.match(/_(\d{3,4})w\.mp4/i);
+    const w = wMatch ? Number(wMatch[1]) : undefined;
+    // For Pinterest videos, the _NNNw suffix is the WIDTH; height is unknown.
+    const key = `V_${w ?? "AUTO"}W`;
+    if (!out[key]) {
+      out[key] = { url, width: w };
+    }
+  }
+
+  // 2. HLS playlists — derive MP4 variants for each unique playlist
+  const hlsMatches = new Set<string>();
+  for (const m of html.matchAll(/https?:\/\/[^"'\s<>]+\.m3u8(?:\?[^"'\s<>]*)?/gi)) {
+    hlsMatches.add(m[0]);
+  }
+  for (const hls of hlsMatches) {
+    const probed = await probeMp4Variants(hls);
+    for (const [k, v] of Object.entries(probed)) {
+      if (!out[k]) out[k] = v;
+    }
+  }
+
+  return out;
+}
+
 async function parseFromMeta(html: string): Promise<ExtractedPin> {
   const ogVideo = pickMeta(html, "og:video") ?? pickMeta(html, "og:video:url");
   const ogImage = pickMeta(html, "og:image");
@@ -582,12 +620,31 @@ async function extractPin(rawUrl: string): Promise<ExtractedPin> {
     if (pin) {
       const result = parseFromPinObject(pin);
       if (result.images.length > 0 || Object.keys(result.videos).length > 0) {
+        // If the JSON pin object had no videos (common for private/sent
+        // shares), still scan the raw HTML — Pinterest often leaves the
+        // video URLs embedded in other script blocks even when stripping
+        // them from the anonymous pin JSON.
+        if (Object.keys(result.videos).length === 0) {
+          const scraped = await scrapeVideosFromHtml(html);
+          if (Object.keys(scraped).length > 0) {
+            result.videos = scraped;
+            result.type = "video";
+          }
+        }
         await enrichVideoQualities(result);
         return result;
       }
     }
   }
   const meta = await parseFromMeta(html);
+  // Same fallback for the og:meta path
+  if (Object.keys(meta.videos).length === 0) {
+    const scraped = await scrapeVideosFromHtml(html);
+    if (Object.keys(scraped).length > 0) {
+      meta.videos = scraped;
+      meta.type = "video";
+    }
+  }
   await enrichVideoQualities(meta);
   return meta;
 }
