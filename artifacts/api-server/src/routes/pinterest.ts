@@ -496,6 +496,46 @@ function parseFromWidget(p: Record<string, unknown>): ExtractedPin {
   };
 }
 
+// Whenever we have at least one Pinterest video URL, probe every standard
+// MP4 quality folder (240p / 480p / 720p / 1080p) and merge any extras the
+// upstream data didn't list. Pinterest's CDN only stores resolutions that
+// actually exist for the source video, so HEAD-checks reliably reveal the
+// real quality matrix.
+async function enrichVideoQualities(p: ExtractedPin): Promise<void> {
+  const existing = Object.values(p.videos)
+    .map((v) => v.url)
+    .find((u) => /\.m3u8(\?|$)/.test(u) || /\.mp4(\?|$)/.test(u));
+  if (!existing) return;
+
+  // Pick a seed URL we can transform into the canonical hash path
+  let seedHls = existing;
+  if (existing.endsWith(".mp4")) {
+    seedHls = existing
+      .replace(/\/(?:240p|480p|720p|1080p)\//, "/hls/")
+      .replace(/\.mp4(\?.*)?$/, ".m3u8$1");
+  }
+
+  const probed = await probeMp4Variants(seedHls);
+  // Aspect ratio from the largest existing video, used to fill in widths
+  const ref = Object.values(p.videos)
+    .filter((v) => v.width && v.height)
+    .sort((a, b) => (b.height ?? 0) - (a.height ?? 0))[0];
+  const ratio =
+    ref && ref.width && ref.height && ref.height > 0
+      ? ref.width / ref.height
+      : undefined;
+
+  const seenUrls = new Set(Object.values(p.videos).map((v) => v.url));
+  for (const [k, v] of Object.entries(probed)) {
+    if (seenUrls.has(v.url)) continue;
+    if (p.videos[k]) continue;
+    p.videos[k] = {
+      ...v,
+      width: v.width ?? (ratio ? Math.round((v.height ?? 0) * ratio) : undefined),
+    };
+  }
+}
+
 async function extractPin(rawUrl: string): Promise<ExtractedPin> {
   const u = new URL(rawUrl);
   const pinId = pinIdFromUrl(u);
@@ -506,6 +546,7 @@ async function extractPin(rawUrl: string): Promise<ExtractedPin> {
     if (widget) {
       const result = parseFromWidget(widget);
       if (result.images.length > 0 || Object.keys(result.videos).length > 0) {
+        await enrichVideoQualities(result);
         return result;
       }
     }
@@ -531,11 +572,14 @@ async function extractPin(rawUrl: string): Promise<ExtractedPin> {
     if (pin) {
       const result = parseFromPinObject(pin);
       if (result.images.length > 0 || Object.keys(result.videos).length > 0) {
+        await enrichVideoQualities(result);
         return result;
       }
     }
   }
-  return parseFromMeta(html);
+  const meta = await parseFromMeta(html);
+  await enrichVideoQualities(meta);
+  return meta;
 }
 
 function buildFormats(p: ExtractedPin): Array<{
