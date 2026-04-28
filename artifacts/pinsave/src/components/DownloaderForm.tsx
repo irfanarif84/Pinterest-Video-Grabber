@@ -129,17 +129,17 @@ export default function DownloaderForm() {
         {stats && (
           <>
             <div className="flex flex-col items-center">
-              <span className="text-foreground font-display font-bold text-xl">{stats.downloads.toLocaleString()}+</span>
+              <span className="text-foreground font-display font-bold text-xl">{(stats.downloads ?? 0).toLocaleString()}+</span>
               <span>Downloads</span>
             </div>
             <div className="w-px h-8 bg-border/50" />
             <div className="flex flex-col items-center">
-              <span className="text-foreground font-display font-bold text-xl">{stats.users.toLocaleString()}+</span>
+              <span className="text-foreground font-display font-bold text-xl">{(stats.users ?? 0).toLocaleString()}+</span>
               <span>Happy Users</span>
             </div>
             <div className="w-px h-8 bg-border/50" />
             <div className="flex flex-col items-center">
-              <span className="text-primary font-display font-bold text-xl">{stats.averageSeconds.toFixed(1)}s</span>
+              <span className="text-primary font-display font-bold text-xl">{(stats.averageSeconds ?? 0).toFixed(1)}s</span>
               <span>Fast Extraction</span>
             </div>
           </>
@@ -160,6 +160,23 @@ export default function DownloaderForm() {
                     src={extractMutation.data.thumbnail} 
                     alt={extractMutation.data.title || "Pinterest Media"} 
                     className="w-full h-full object-cover absolute inset-0"
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      const original = extractMutation.data?.thumbnail ?? "";
+                      // First fallback: downscale /originals/ → /564x/
+                      if (/\/originals\//.test(img.src)) {
+                        img.src = img.src.replace(/\/originals\//, "/564x/");
+                        return;
+                      }
+                      // Second fallback: route through our proxy with proper Referer
+                      const proxied = `${import.meta.env.BASE_URL}api/pinterest/proxy?url=${encodeURIComponent(original)}`;
+                      if (img.src !== proxied) {
+                        img.src = proxied;
+                        return;
+                      }
+                      // Final fallback: hide the broken image
+                      img.style.display = "none";
+                    }}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-muted-foreground absolute inset-0">

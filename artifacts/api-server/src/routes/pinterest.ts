@@ -67,6 +67,25 @@ interface ExtractedPin {
   images: ImageEntry[];
 }
 
+// Pinterest's CDN blocks /originals/ images for many pins from non-Pinterest
+// origins (returns 403). The /236x/, /237x/, and /564x/ size variants are
+// universally hotlinkable. Always prefer those for the preview thumbnail —
+// originals are kept in the formats list as a download option (where the
+// proxy can sometimes still fetch them with the right Referer).
+function pickHotlinkableThumbnail(images: ImageEntry[]): string {
+  const safe = images.filter((i) => i.url && !/\/originals\//.test(i.url));
+  if (safe.length > 0) {
+    return safe.sort((a, b) => (b.width ?? 0) - (a.width ?? 0))[0].url;
+  }
+  // Fall back to deriving a 564x URL from any originals URL we have
+  for (const i of images) {
+    if (!i.url) continue;
+    const downscaled = i.url.replace(/\/originals\//, "/564x/");
+    if (downscaled !== i.url) return downscaled;
+  }
+  return images[0]?.url ?? "";
+}
+
 function decodeHtml(s: string): string {
   return s
     .replace(/&quot;/g, '"')
@@ -200,14 +219,8 @@ function parseFromPinObject(pin: Record<string, unknown>): ExtractedPin {
       }
     }
   }
-  // Best original image
-  const orig = (pin.images as Record<string, unknown> | undefined)?.["orig"] as
-    | Record<string, unknown>
-    | undefined;
-  const thumbnail =
-    asString(orig?.url) ??
-    images.sort((a, b) => (b.width ?? 0) - (a.width ?? 0))[0]?.url ??
-    "";
+  // Pick a thumbnail Pinterest's CDN actually allows us to hotlink
+  const thumbnail = pickHotlinkableThumbnail(images);
 
   const videos: Record<string, VideoEntry> = {};
   // Try multiple shapes: pin.videos.video_list, pin.story_pin_data.pages[].blocks[].video.video_list
@@ -472,10 +485,7 @@ function parseFromWidget(p: Record<string, unknown>): ExtractedPin {
   const author =
     asString(((p.pinner as Record<string, unknown> | undefined) ?? {})["full_name"]) ??
     "";
-  const thumbnail =
-    images.find((i) => /originals/.test(i.url))?.url ??
-    images.sort((a, b) => (b.width ?? 0) - (a.width ?? 0))[0]?.url ??
-    "";
+  const thumbnail = pickHotlinkableThumbnail(images);
 
   let type: "video" | "image" | "gif" = "image";
   if (Object.keys(videos).length > 0) type = "video";
