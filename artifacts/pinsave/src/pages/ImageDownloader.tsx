@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Image as ImageIcon, Zap, Shield, Check } from "lucide-react";
 import DownloaderForm from "@/components/DownloaderForm";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { usePageSEO } from "@/lib/seo";
+import { usePageSEO, ORIGIN_URL } from "@/lib/seo";
 
 export default function ImageDownloader() {
   usePageSEO({
@@ -13,6 +14,78 @@ export default function ImageDownloader() {
     canonical: "/pinterest-image-downloader",
     keywords: "pinterest image downloader, download pinterest images, pinterest picture downloader, save pinterest photo",
   });
+
+  useEffect(() => {
+    const schemas = [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: "Pinterest Image Downloader",
+        description:
+          "Free tool to download Pinterest images and photos in full resolution without watermark.",
+        url: `${ORIGIN_URL}/pinterest-image-downloader`,
+        isPartOf: {
+          "@type": "WebSite",
+          name: "PinSavePro",
+          url: ORIGIN_URL,
+        },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${ORIGIN_URL}/` },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Pinterest Image Downloader",
+            item: `${ORIGIN_URL}/pinterest-image-downloader`,
+          },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "Will I get the original Pinterest image quality?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. PinSavePro requests the original full-size file directly from Pinterest's CDN, not a thumbnail.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Can I download Pinterest images on iPhone?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. Tap and hold the download link in Safari, then choose Save to Photos or Add to Files.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Is it legal to download Pinterest images?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Downloading for personal use is generally fine, but the underlying image is owned by its creator. Always check the source and respect copyright before reusing or redistributing content.",
+            },
+          },
+        ],
+      },
+    ];
+    const ids = schemas.map((s, i) => {
+      const id = `ld-image-${i}`;
+      if (document.getElementById(id)) return id;
+      const el = document.createElement("script");
+      el.id = id;
+      el.type = "application/ld+json";
+      el.text = JSON.stringify(s);
+      document.head.appendChild(el);
+      return id;
+    });
+    return () => ids.forEach((id) => document.getElementById(id)?.remove());
+  }, []);
 
   return (
     <div className="min-h-screen bg-background flex flex-col selection:bg-primary/30">

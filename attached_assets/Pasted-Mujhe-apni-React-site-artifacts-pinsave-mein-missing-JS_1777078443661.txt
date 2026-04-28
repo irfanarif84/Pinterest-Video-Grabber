@@ -1,0 +1,117 @@
+Mujhe apni React site (artifacts/pinsave/) mein missing JSON-LD schemas add karne hain.
+
+PROBLEM 1 — Homepage schemas fix karein (artifacts/pinsave/index.html):
+
+HowTo schema mein yeh fields add karein:
+- "estimatedCost": {"@type": "MonetaryAmount", "currency": "USD", "value": "0"}
+- Har step mein "image" field add karein
+
+Organization schema mein sameAs fill karein:
+- "sameAs": ["https://twitter.com/PinSavePro", "https://facebook.com/PinSavePro"]
+
+BreadcrumbList ko remove karein homepage se (1 item wala breadcrumb useless hai)
+
+---
+
+PROBLEM 2 — Har sub-page mein useEffect se JSON-LD inject karein.
+
+GifDownloader.tsx mein add karein:
+
+import { useEffect } from "react";
+import { ORIGIN_URL } from "@/lib/seo";
+
+// usePageSEO ke baad yeh useEffect add karein:
+useEffect(() => {
+  const schemas = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Pinterest GIF Downloader",
+      "description": "Free tool to download animated GIFs from Pinterest without watermark.",
+      "url": `${ORIGIN_URL}/pinterest-gif-downloader`,
+      "isPartOf": { "@type": "WebSite", "name": "PinSavePro", "url": ORIGIN_URL }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": `${ORIGIN_URL}/` },
+        { "@type": "ListItem", "position": 2, "name": "Pinterest GIF Downloader", "item": `${ORIGIN_URL}/pinterest-gif-downloader` }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Does Pinterest support GIF pins?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Pinterest supports animated GIF pins, and PinSavePro extracts them in original .gif format with full animation preserved." } },
+        { "@type": "Question", "name": "Why does my downloaded GIF play as a video?", "acceptedAnswer": { "@type": "Answer", "text": "Some Pinterest GIFs are actually short MP4 clips. PinSavePro saves the original format Pinterest serves — which may be MP4 for newer pins." } },
+        { "@type": "Question", "name": "Can I download GIFs on iPhone?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Use Safari, paste the link, and the GIF saves to your Files app or Photos library." } }
+      ]
+    }
+  ];
+
+  const tags = schemas.map((s, i) => {
+    const el = document.createElement("script");
+    el.id = `ld-gif-${i}`;
+    el.type = "application/ld+json";
+    el.text = JSON.stringify(s);
+    document.head.appendChild(el);
+    return el.id;
+  });
+
+  return () => tags.forEach(id => document.getElementById(id)?.remove());
+}, []);
+
+---
+
+ImageDownloader.tsx mein SAME pattern apply karein, lekin:
+- @type: "WebPage", name: "Pinterest Image Downloader"
+- url: `${ORIGIN_URL}/pinterest-image-downloader`
+- BreadcrumbList position 2: "Pinterest Image Downloader"
+- FAQPage: ImageDownloader.tsx ke 3 existing FAQs use karein
+
+---
+
+Mp3Converter.tsx mein SAME pattern apply karein, lekin:
+- @type: "WebPage", name: "Pinterest to MP3 Converter"  
+- url: `${ORIGIN_URL}/pinterest-to-mp3`
+- BreadcrumbList position 2: "Pinterest to MP3"
+- FAQPage: Mp3Converter.tsx ke 3 existing FAQs use karein
+
+---
+
+HowToGuide.tsx mein yeh schemas add karein:
+- Article schema (datePublished: "2026-04-25")
+- BreadcrumbList (Home → How to Download Pinterest Videos)
+- HowTo schema with 4 separate step groups (iPhone, Android, Windows, Mac)
+
+---
+
+PROBLEM 3 — Homepage index.html mein globally missing schemas add karein:
+
+1. SoftwareApplication schema:
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "PinSavePro",
+  "operatingSystem": "Web Browser",
+  "applicationCategory": "UtilitiesApplication",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "15420" }
+}
+
+2. ItemList schema (tool links list):
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "PinSavePro Tools",
+  "description": "Free Pinterest downloading tools",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Pinterest Video Downloader", "url": "ORIGIN_URL/" },
+    { "@type": "ListItem", "position": 2, "name": "Pinterest GIF Downloader", "url": "ORIGIN_URL/pinterest-gif-downloader" },
+    { "@type": "ListItem", "position": 3, "name": "Pinterest Image Downloader", "url": "ORIGIN_URL/pinterest-image-downloader" },
+    { "@type": "ListItem", "position": 4, "name": "Pinterest to MP3", "url": "ORIGIN_URL/pinterest-to-mp3" }
+  ]
+}
+
+Sab implement karne ke baad test karein: https://search.google.com/test/rich-results

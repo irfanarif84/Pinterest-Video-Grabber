@@ -5,8 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
-    "build": "vite build --config vite.config.ts",
-    "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
+    "build": "vite build --config vite.config.ts && node ./build-server.mjs",
+    "build:client": "vite build --config vite.config.ts",
+    "build:server": "node ./build-server.mjs",
+    "serve": "node --enable-source-maps ./dist/server/index.mjs",
+    "preview:vite": "vite preview --config vite.config.ts --host 0.0.0.0",
+    "generate-icons": "node scripts/generate-icons.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
@@ -72,6 +76,12 @@
     "vaul": "^1.1.2",
     "vite": "catalog:",
     "wouter": "^3.3.5",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "compression": "^1.7.5",
+    "express": "^5",
+    "esbuild": "^0.27.3",
+    "@types/compression": "^1.7.5",
+    "@types/express": "^5.0.6",
+    "sharp": "^0.34.0"
   }
 }

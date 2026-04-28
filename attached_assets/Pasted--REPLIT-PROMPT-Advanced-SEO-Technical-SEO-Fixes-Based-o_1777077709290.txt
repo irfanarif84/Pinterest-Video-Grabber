@@ -1,0 +1,920 @@
+# REPLIT PROMPT — Advanced SEO & Technical SEO Fixes
+# Based on full code audit of PinSavePro (Pinterest-Video-Grabber)
+# Date: 2026-04-25
+
+---
+
+## CONTEXT
+
+This is a React + Vite + Express monorepo (pnpm workspaces). The frontend lives in
+`artifacts/pinsave/` and the API server in `artifacts/api-server/`. The site is
+a Pinterest video downloader called PinSavePro.
+
+I have already audited every file. Most basic SEO is done. The remaining gaps are
+**critical technical issues** that will prevent ranking. Fix ALL of them exactly
+as described below. Do not skip any item.
+
+---
+
+## CRITICAL GAP #1 — SERVER-SIDE RENDERING (HIGHEST PRIORITY)
+
+**The problem:** The site is a pure React SPA served as a blank `<div id="root">`.
+Googlebot runs JavaScript, but slowly and unreliably. React client-side routing
+(`wouter`) means sub-pages like `/pinterest-gif-downloader` return the same blank
+shell to crawlers — they never see unique H1s or content.
+
+You already have a hidden `#seo-prerender` div in `index.html` with static text,
+but this only covers the homepage, not the sub-pages, and the approach is fragile.
+
+**The fix:** Add Express-based Server-Side Rendering (SSR) using React's
+`renderToStaticMarkup` so every route returns fully rendered HTML.
+
+### Step 1 — Install SSR dependencies in `artifacts/api-server/`
+```bash
+cd artifacts/api-server
+npm install react react-dom @types/react @types/react-dom --save
+```
+
+### Step 2 — Create `artifacts/api-server/src/ssr/pages.ts`
+This file exports the static HTML shell for each route. Keep it simple — just the
+SEO-critical text content, not the full React app.
+
+```typescript
+// artifacts/api-server/src/ssr/pages.ts
+
+export const ORIGIN = "https://pinterest-video-grabber--irfanarif1984.replit.app";
+
+interface PageMeta {
+  title: string;
+  description: string;
+  canonical: string;
+  keywords: string;
+  h1: string;
+  bodyContent: string;
+  breadcrumbs?: { name: string; url: string }[];
+  extraSchema?: string;
+}
+
+export const PAGES: Record<string, PageMeta> = {
+  "/": {
+    title: "PinSavePro – Free Pinterest Video Downloader | HD, 4K, MP4, MP3",
+    description: "Download Pinterest videos, images, GIFs, and Reels for free in HD, 2K, and 4K. No login required. Works on Android, iPhone, and desktop. Fast, safe, 100% free.",
+    canonical: `${ORIGIN}/`,
+    keywords: "pinterest video downloader, download pinterest videos, pinterest to mp4, save pinterest video, pinterest gif downloader, pinterest image downloader, pinterest downloader online, pinterest video download without watermark, pinterest to mp3",
+    h1: "Pinterest Video Downloader – Free, HD, 4K, No Watermark",
+    bodyContent: `
+      <p>PinSavePro is the fastest free online <strong>Pinterest video downloader</strong>. Save Pinterest videos, GIFs, images, Idea Pins, and Reels in HD, 2K, and 4K quality without any watermark. No login, no app, no registration. Works on iPhone, Android, Windows, Mac, and Linux.</p>
+      <h2>How to Download Pinterest Videos</h2>
+      <ol>
+        <li><strong>Copy the Pinterest link.</strong> Tap the share icon → Copy Link in the Pinterest app, or copy the URL from the address bar on desktop.</li>
+        <li><strong>Paste it into PinSavePro.</strong> Paste the URL into the input box above and click Download.</li>
+        <li><strong>Choose quality and save.</strong> Pick MP4 (720p/1080p/4K), MP3, GIF, or original image. File saves to your Downloads folder.</li>
+      </ol>
+      <h2>Supported Formats</h2>
+      <ul>
+        <li>MP4 video in 720p, 1080p, 2K, and 4K</li>
+        <li>MP3 audio extracted from any Pinterest video</li>
+        <li>Animated GIF downloads</li>
+        <li>JPG, PNG, and WebP image downloads</li>
+        <li>Pinterest Idea Pins and Reels</li>
+      </ul>
+      <h2>Why Choose PinSavePro?</h2>
+      <ul>
+        <li>HD and 4K quality — the highest Pinterest exposes</li>
+        <li>No watermarks — the original file, untouched</li>
+        <li>No login, no signup, completely anonymous</li>
+        <li>Free forever — no paywall</li>
+        <li>Works on every browser and device</li>
+        <li>Download pinterest video on iPhone using Safari</li>
+        <li>Download pinterest video on Android using Chrome</li>
+      </ul>
+      <h2>Related Tools</h2>
+      <ul>
+        <li><a href="/pinterest-gif-downloader">Pinterest GIF Downloader</a></li>
+        <li><a href="/pinterest-image-downloader">Pinterest Image Downloader</a></li>
+        <li><a href="/pinterest-to-mp3">Pinterest to MP3 Converter</a></li>
+        <li><a href="/how-to-download-pinterest-videos">How to Download Pinterest Videos</a></li>
+      </ul>
+    `,
+  },
+  "/pinterest-gif-downloader": {
+    title: "Pinterest GIF Downloader – Save Animated Pinterest GIFs | PinSavePro",
+    description: "Download animated GIFs from Pinterest for free in original quality. No watermark, no login. Works on Android, iPhone, and desktop browsers.",
+    canonical: `${ORIGIN}/pinterest-gif-downloader`,
+    keywords: "pinterest gif downloader, download pinterest gif, save pinterest gif, animated pinterest pin downloader",
+    h1: "Pinterest GIF Downloader – Save Animated Pins Free",
+    breadcrumbs: [{ name: "Pinterest GIF Downloader", url: "/pinterest-gif-downloader" }],
+    bodyContent: `
+      <p>Use PinSavePro's free <strong>Pinterest GIF downloader</strong> to save any animated GIF pin in its original quality. No quality loss, no watermark, no account needed. Just paste the Pinterest GIF URL and download instantly.</p>
+      <h2>How to Download a Pinterest GIF</h2>
+      <ol>
+        <li>Open Pinterest and find the animated GIF pin you want to save.</li>
+        <li>Tap the share icon and select <strong>Copy Link</strong>, or copy the URL from your desktop browser.</li>
+        <li>Paste the link into the input box and click Download.</li>
+        <li>Choose the GIF format and save it to your device.</li>
+      </ol>
+      <h2>Why Use Our Pinterest GIF Downloader?</h2>
+      <ul>
+        <li>Original GIF quality — no re-encoding or compression</li>
+        <li>No watermarks added to downloaded GIFs</li>
+        <li>Works on iPhone (Safari), Android (Chrome), and all desktop browsers</li>
+        <li>100% free with no login required</li>
+        <li>Supports all Pinterest GIF pins and animated pins</li>
+      </ul>
+      <h2>Related Tools</h2>
+      <ul>
+        <li><a href="/">Pinterest Video Downloader</a></li>
+        <li><a href="/pinterest-image-downloader">Pinterest Image Downloader</a></li>
+        <li><a href="/pinterest-to-mp3">Pinterest to MP3 Converter</a></li>
+      </ul>
+    `,
+    extraSchema: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": `${ORIGIN}/` },
+        { "@type": "ListItem", "position": 2, "name": "Pinterest GIF Downloader", "item": `${ORIGIN}/pinterest-gif-downloader` }
+      ]
+    }),
+  },
+  "/pinterest-image-downloader": {
+    title: "Pinterest Image Downloader – Save HD Photos Free | PinSavePro",
+    description: "Download Pinterest images and photos in full resolution for free. JPG, PNG, WebP supported. No login, no watermark. Works on all devices.",
+    canonical: `${ORIGIN}/pinterest-image-downloader`,
+    keywords: "pinterest image downloader, download pinterest images, save pinterest photos, pinterest photo downloader",
+    h1: "Pinterest Image Downloader – Full Resolution, Free",
+    breadcrumbs: [{ name: "Pinterest Image Downloader", url: "/pinterest-image-downloader" }],
+    bodyContent: `
+      <p>PinSavePro's free <strong>Pinterest image downloader</strong> saves any Pinterest photo or image pin in its original full resolution. Download JPG, PNG, and WebP images from Pinterest without watermarks or quality loss.</p>
+      <h2>How to Download Pinterest Images</h2>
+      <ol>
+        <li>Find the image on Pinterest you want to save.</li>
+        <li>Copy the pin's URL from the Pinterest app or your browser.</li>
+        <li>Paste it into PinSavePro and click Download.</li>
+        <li>Select the image resolution and save to your device.</li>
+      </ol>
+      <h2>Supported Image Formats</h2>
+      <ul>
+        <li>JPG / JPEG — the most common Pinterest image format</li>
+        <li>PNG — for pins with transparent backgrounds</li>
+        <li>WebP — Pinterest's modern image format</li>
+        <li>Original resolution — we never downscale your image</li>
+      </ul>
+      <h2>Related Tools</h2>
+      <ul>
+        <li><a href="/">Pinterest Video Downloader</a></li>
+        <li><a href="/pinterest-gif-downloader">Pinterest GIF Downloader</a></li>
+        <li><a href="/pinterest-to-mp3">Pinterest to MP3 Converter</a></li>
+      </ul>
+    `,
+    extraSchema: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": `${ORIGIN}/` },
+        { "@type": "ListItem", "position": 2, "name": "Pinterest Image Downloader", "item": `${ORIGIN}/pinterest-image-downloader` }
+      ]
+    }),
+  },
+  "/pinterest-to-mp3": {
+    title: "Pinterest to MP3 Converter – Extract Audio Free | PinSavePro",
+    description: "Convert any Pinterest video to MP3 audio for free. High quality audio extraction, no login, no watermark. Works on mobile and desktop.",
+    canonical: `${ORIGIN}/pinterest-to-mp3`,
+    keywords: "pinterest to mp3, pinterest mp3 converter, extract audio from pinterest, pinterest audio downloader",
+    h1: "Pinterest to MP3 Converter – Free Audio Extractor",
+    breadcrumbs: [{ name: "Pinterest to MP3", url: "/pinterest-to-mp3" }],
+    bodyContent: `
+      <p>Extract and download high-quality MP3 audio from any Pinterest video using PinSavePro's free <strong>Pinterest to MP3 converter</strong>. Perfect for saving music clips, tutorials, and audio content from Pinterest Reels and video pins.</p>
+      <h2>How to Convert Pinterest Video to MP3</h2>
+      <ol>
+        <li>Find the Pinterest video you want to convert to MP3.</li>
+        <li>Copy the video's URL from the Pinterest app or browser.</li>
+        <li>Paste the URL into PinSavePro and click Download.</li>
+        <li>Select the MP3 option to download audio only.</li>
+      </ol>
+      <h2>Why Extract MP3 from Pinterest?</h2>
+      <ul>
+        <li>Save music from Pinterest video pins as MP3 files</li>
+        <li>Download tutorial audio for offline listening</li>
+        <li>Extract audio from Pinterest Reels</li>
+        <li>High-quality audio extraction — no quality loss</li>
+        <li>No login or account required</li>
+      </ul>
+      <h2>Related Tools</h2>
+      <ul>
+        <li><a href="/">Pinterest Video Downloader</a></li>
+        <li><a href="/pinterest-gif-downloader">Pinterest GIF Downloader</a></li>
+        <li><a href="/pinterest-image-downloader">Pinterest Image Downloader</a></li>
+      </ul>
+    `,
+    extraSchema: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": `${ORIGIN}/` },
+        { "@type": "ListItem", "position": 2, "name": "Pinterest to MP3", "item": `${ORIGIN}/pinterest-to-mp3` }
+      ]
+    }),
+  },
+  "/how-to-download-pinterest-videos": {
+    title: "How to Download Pinterest Videos in 2026 – Complete Guide | PinSavePro",
+    description: "Step-by-step guide: how to download Pinterest videos on iPhone, Android, and desktop. Works without an app. Free and fast.",
+    canonical: `${ORIGIN}/how-to-download-pinterest-videos`,
+    keywords: "how to download pinterest videos, how to save pinterest video, download pinterest video iphone, download pinterest video android",
+    h1: "How to Download Pinterest Videos (2026 Complete Guide)",
+    breadcrumbs: [{ name: "How to Download Pinterest Videos", url: "/how-to-download-pinterest-videos" }],
+    bodyContent: `
+      <p>This guide covers exactly <strong>how to download Pinterest videos</strong> on any device in 2026. Whether you're on iPhone, Android, or a desktop computer, PinSavePro makes it simple, fast, and completely free.</p>
+      <h2>Method 1: Download on iPhone or iPad</h2>
+      <ol>
+        <li>Open the Pinterest app on your iPhone.</li>
+        <li>Find the video you want to download.</li>
+        <li>Tap the share icon (box with arrow) at the bottom of the pin.</li>
+        <li>Tap <strong>Copy Link</strong>.</li>
+        <li>Open Safari and go to PinSavePro.</li>
+        <li>Paste the link and tap Download.</li>
+        <li>Tap and hold the download button → Save to Files or Photos.</li>
+      </ol>
+      <h2>Method 2: Download on Android</h2>
+      <ol>
+        <li>Open Pinterest on your Android phone.</li>
+        <li>Find the video and tap the three-dot menu (•••).</li>
+        <li>Select <strong>Copy Link</strong>.</li>
+        <li>Open Chrome and visit PinSavePro.</li>
+        <li>Paste the URL and tap Download.</li>
+        <li>The video saves to your Downloads folder automatically.</li>
+      </ol>
+      <h2>Method 3: Download on Desktop (Windows/Mac)</h2>
+      <ol>
+        <li>Open pinterest.com in your browser.</li>
+        <li>Navigate to the video pin.</li>
+        <li>Copy the URL from the address bar.</li>
+        <li>Open a new tab and go to PinSavePro.</li>
+        <li>Paste the URL and click Download.</li>
+        <li>Choose your preferred quality (HD, 2K, 4K, or MP3).</li>
+        <li>The file downloads to your Downloads folder. Press Ctrl+J to view.</li>
+      </ol>
+      <h2>Frequently Asked Questions</h2>
+      <h3>Can I download Pinterest videos without an app?</h3>
+      <p>Yes. PinSavePro works entirely in your browser — no app install needed on any device.</p>
+      <h3>What is the highest quality I can download?</h3>
+      <p>PinSavePro gives you every quality option Pinterest exposes for that video — up to 4K if the original pin was uploaded at that resolution.</p>
+      <h2>Related Tools</h2>
+      <ul>
+        <li><a href="/">Pinterest Video Downloader</a></li>
+        <li><a href="/pinterest-gif-downloader">Pinterest GIF Downloader</a></li>
+        <li><a href="/pinterest-image-downloader">Pinterest Image Downloader</a></li>
+        <li><a href="/pinterest-to-mp3">Pinterest to MP3 Converter</a></li>
+      </ul>
+    `,
+    extraSchema: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "How to Download Pinterest Videos in 2026",
+      "description": "Step-by-step guide to downloading Pinterest videos on iPhone, Android, and desktop.",
+      "author": { "@type": "Organization", "name": "PinSavePro" },
+      "datePublished": "2026-04-25",
+      "dateModified": "2026-04-25"
+    }),
+  },
+};
+
+export function buildSSRHtml(path: string): string {
+  const page = PAGES[path] || PAGES["/"];
+  const origin = ORIGIN;
+
+  // Read the index.html template from the built frontend
+  // and inject per-route meta + prerendered content
+  return `<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${page.title}</title>
+  <meta name="description" content="${page.description}" />
+  <meta name="keywords" content="${page.keywords}" />
+  <meta name="author" content="PinSavePro" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow" />
+  <meta name="bingbot" content="index, follow" />
+  <link rel="canonical" href="${page.canonical}" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="${page.canonical}" />
+  <meta property="og:title" content="${page.title}" />
+  <meta property="og:description" content="${page.description}" />
+  <meta property="og:image" content="${origin}/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PinSavePro Pinterest Video Downloader" />
+  <meta property="og:site_name" content="PinSavePro" />
+  <meta property="og:locale" content="en_US" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@PinSavePro" />
+  <meta name="twitter:title" content="${page.title}" />
+  <meta name="twitter:description" content="${page.description}" />
+  <meta name="twitter:image" content="${origin}/og-image.jpg" />
+
+  <link rel="alternate" hreflang="en" href="${page.canonical}" />
+  <link rel="alternate" hreflang="x-default" href="${origin}/" />
+
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#E8003D" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="PinSavePro" />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="//i.pinimg.com" />
+
+  ${page.extraSchema ? `<script type="application/ld+json">${page.extraSchema}</script>` : ""}
+
+  <style>
+    .skip-link{position:absolute;left:-9999px;top:0;z-index:9999;padding:12px 16px;background:#E8003D;color:#fff;font:600 14px/1 system-ui,sans-serif;text-decoration:none;border-radius:0 0 8px 0;}
+    .skip-link:focus{left:0;}
+    #seo-prerender{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;}
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div id="root">
+    <div id="seo-prerender" aria-hidden="true">
+      <header role="banner">
+        <nav aria-label="Main navigation">
+          <a href="/">PinSavePro – Pinterest Video Downloader</a>
+          <a href="/pinterest-gif-downloader">Pinterest GIF Downloader</a>
+          <a href="/pinterest-image-downloader">Pinterest Image Downloader</a>
+          <a href="/pinterest-to-mp3">Pinterest to MP3</a>
+          <a href="/how-to-download-pinterest-videos">How To Guide</a>
+        </nav>
+      </header>
+      <main role="main" id="main-content">
+        <h1>${page.h1}</h1>
+        ${page.bodyContent}
+      </main>
+      <footer role="contentinfo">
+        <p>© PinSavePro. Independent service not affiliated with Pinterest, Inc.</p>
+      </footer>
+    </div>
+  </div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>`;
+}
+```
+
+### Step 3 — Update `artifacts/api-server/src/app.ts`
+
+Replace the entire file with this:
+
+```typescript
+import express, { type Express } from "express";
+import cors from "cors";
+import compression from "compression";
+import pinoHttp from "pino-http";
+import router from "./routes";
+import { logger } from "./lib/logger";
+import { buildSSRHtml, PAGES } from "./ssr/pages";
+import path from "path";
+import fs from "fs";
+
+const app: Express = express();
+
+// ── COMPRESSION (gzip/brotli) ──────────────────────────────────────────────
+app.use(compression({ level: 6 }));
+
+// ── SECURITY HEADERS ───────────────────────────────────────────────────────
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()");
+  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+  next();
+});
+
+// ── LOGGING ────────────────────────────────────────────────────────────────
+app.use(
+  pinoHttp({
+    logger,
+    serializers: {
+      req(req) { return { id: req.id, method: req.method, url: req.url?.split("?")[0] }; },
+      res(res) { return { statusCode: res.statusCode }; },
+    },
+  }),
+);
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ── API ROUTES ─────────────────────────────────────────────────────────────
+app.use("/api", router);
+
+// ── STATIC ASSETS (from built frontend) ───────────────────────────────────
+const DIST_DIR = path.resolve(process.cwd(), "artifacts/pinsave/dist/public");
+if (fs.existsSync(DIST_DIR)) {
+  // Cache static assets for 1 year (immutable)
+  app.use(express.static(DIST_DIR, {
+    maxAge: "1y",
+    immutable: true,
+    index: false, // We serve index.html ourselves per-route for SSR
+  }));
+}
+
+// ── SSR — SERVE EACH ROUTE WITH PRERENDERED HTML ───────────────────────────
+const SSR_ROUTES = Object.keys(PAGES);
+
+SSR_ROUTES.forEach((route) => {
+  app.get(route, (_req, res) => {
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
+    res.send(buildSSRHtml(route));
+  });
+});
+
+// ── 404 PAGE ───────────────────────────────────────────────────────────────
+app.use((_req, res) => {
+  res.status(404);
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>404 – Page Not Found | PinSavePro</title>
+  <meta name="robots" content="noindex, follow" />
+  <meta name="description" content="Page not found. Go back to PinSavePro to download Pinterest videos for free." />
+  <link rel="canonical" href="https://pinterest-video-grabber--irfanarif1984.replit.app/" />
+  <style>
+    body{font-family:system-ui,sans-serif;background:#0a0a0f;color:#f0eef8;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:1rem;text-align:center;padding:2rem;}
+    h1{font-size:3rem;font-weight:800;color:#E8003D;margin:0;}
+    p{color:#8a879e;max-width:400px;}
+    a{color:#E8003D;font-weight:600;text-decoration:none;border:1px solid #E8003D;padding:.6rem 1.4rem;border-radius:8px;margin-top:.5rem;display:inline-block;}
+    a:hover{background:#E8003D;color:#fff;}
+  </style>
+</head>
+<body>
+  <h1>404</h1>
+  <p>The page you're looking for doesn't exist.</p>
+  <a href="/">← Back to Pinterest Video Downloader</a>
+</body>
+</html>`);
+});
+
+export default app;
+```
+
+### Step 4 — Install compression package
+```bash
+cd artifacts/api-server
+npm install compression @types/compression --save
+```
+
+---
+
+## CRITICAL GAP #2 — CANONICAL TAGS POINT TO REPLIT DEV URL
+
+**The problem:** Every page's canonical URL is hardcoded to `https://pinterest-video-grabber--irfanarif1984.replit.app`. When you move to a custom domain, all canonicals will be wrong and Google will treat your real domain as a duplicate.
+
+**The fix:** Make the origin dynamic via environment variable.
+
+### Update `artifacts/pinsave/src/lib/seo.ts`
+
+Replace the `ORIGIN` constant line:
+```typescript
+// BEFORE:
+const ORIGIN = "https://pinterest-video-grabber--irfanarif1984.replit.app";
+
+// AFTER:
+const ORIGIN = import.meta.env.VITE_SITE_ORIGIN || "https://pinterest-video-grabber--irfanarif1984.replit.app";
+export const ORIGIN_URL = ORIGIN;
+```
+
+Also update the `ssr/pages.ts` file:
+```typescript
+// BEFORE:
+export const ORIGIN = "https://pinterest-video-grabber--irfanarif1984.replit.app";
+
+// AFTER:
+export const ORIGIN = process.env.SITE_ORIGIN || "https://pinterest-video-grabber--irfanarif1984.replit.app";
+```
+
+Add to your Replit Secrets (environment variables):
+- `VITE_SITE_ORIGIN` = `https://pinterest-video-grabber--irfanarif1984.replit.app` (update when you get a custom domain)
+- `SITE_ORIGIN` = same value
+
+---
+
+## CRITICAL GAP #3 — SITEMAP MISSING SUB-PAGES' JSON-LD SCHEMAS
+
+**The problem:** Sub-pages (GIF, Image, MP3, HowTo) each have unique `usePageSEO()` calls that update the `<title>`, `<meta>` tags, and canonical in the browser — but they have NO JSON-LD schema blocks of their own. Google Rich Results require schema per-page.
+
+**The fix:** Add per-page JSON-LD to each sub-page component.
+
+### In `artifacts/pinsave/src/pages/GifDownloader.tsx`
+
+After the `usePageSEO()` call, add this inside the `<>` before `<SiteHeader />`:
+
+```tsx
+useEffect(() => {
+  // Inject page-specific JSON-LD
+  const id = "ld-gif-page";
+  if (!document.getElementById(id)) {
+    const script = document.createElement("script");
+    script.id = id;
+    script.type = "application/ld+json";
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Pinterest GIF Downloader",
+      "description": "Free tool to download animated GIFs from Pinterest without watermark.",
+      "url": `${ORIGIN_URL}/pinterest-gif-downloader`,
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": ORIGIN_URL + "/" },
+          { "@type": "ListItem", "position": 2, "name": "Pinterest GIF Downloader", "item": ORIGIN_URL + "/pinterest-gif-downloader" }
+        ]
+      }
+    });
+    document.head.appendChild(script);
+  }
+  return () => { document.getElementById(id)?.remove(); };
+}, []);
+```
+
+**Apply the same pattern to:**
+- `ImageDownloader.tsx` — schema type `WebPage`, url `/pinterest-image-downloader`
+- `Mp3Converter.tsx` — schema type `WebPage`, url `/pinterest-to-mp3`
+- `HowToGuide.tsx` — use `Article` schema type with `datePublished: "2026-04-25"`
+
+Import `useEffect` at the top of each file:
+```tsx
+import { useEffect } from "react";
+import { ORIGIN_URL } from "@/lib/seo";
+```
+
+---
+
+## CRITICAL GAP #4 — API SERVER MISSING COMPRESSION & SECURITY HEADERS IN PRODUCTION
+
+**The problem:** The `app.ts` has no `compression` middleware and no security headers. The Vite `securityHeadersPlugin` only applies in dev mode — it does nothing in production where Express serves the app.
+
+**The fix:** Already covered in Gap #1 — Step 3 above (the new `app.ts` includes both `compression` and all security headers).
+
+---
+
+## GAP #5 — MANIFEST.JSON MISSING PROPER PNG ICONS
+
+**The problem:** `manifest.json` only references `favicon.svg`. Chrome on Android and iOS PWA install prompts require proper raster PNG icons at specific sizes. Without them, the PWA install prompt is suppressed and the site gets a lower PWA score.
+
+**The fix:** Create PNG icons and update the manifest.
+
+### Create icons using Node.js in `artifacts/pinsave/`
+
+Add this script to `artifacts/pinsave/package.json` scripts:
+```json
+"generate-icons": "node scripts/generate-icons.mjs"
+```
+
+Create `artifacts/pinsave/scripts/generate-icons.mjs`:
+```javascript
+// Generates PNG icons from the SVG favicon using sharp
+import sharp from "sharp";
+import fs from "fs";
+import path from "path";
+
+const SVG_PATH = "./public/favicon.svg";
+const OUT_DIR = "./public/icons";
+const SIZES = [72, 96, 128, 144, 152, 192, 384, 512];
+
+if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
+
+const svgBuffer = fs.readFileSync(SVG_PATH);
+
+for (const size of SIZES) {
+  await sharp(svgBuffer)
+    .resize(size, size)
+    .png()
+    .toFile(path.join(OUT_DIR, `icon-${size}x${size}.png`));
+  console.log(`Generated icon-${size}x${size}.png`);
+}
+```
+
+Run: `cd artifacts/pinsave && npm install sharp --save-dev && npm run generate-icons`
+
+### Update `artifacts/pinsave/public/manifest.json`
+
+Replace `"icons"` array with:
+```json
+"icons": [
+  { "src": "/icons/icon-72x72.png",   "sizes": "72x72",   "type": "image/png" },
+  { "src": "/icons/icon-96x96.png",   "sizes": "96x96",   "type": "image/png" },
+  { "src": "/icons/icon-128x128.png", "sizes": "128x128", "type": "image/png" },
+  { "src": "/icons/icon-144x144.png", "sizes": "144x144", "type": "image/png" },
+  { "src": "/icons/icon-152x152.png", "sizes": "152x152", "type": "image/png" },
+  { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+  { "src": "/icons/icon-384x384.png", "sizes": "384x384", "type": "image/png" },
+  { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+  { "src": "/favicon.svg",            "sizes": "any",      "type": "image/svg+xml" }
+]
+```
+
+Also add to `artifacts/pinsave/index.html` `<head>`:
+```html
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+<link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
+```
+
+---
+
+## GAP #6 — SITEMAP IS STATIC, NOT DYNAMIC
+
+**The problem:** `sitemap.xml` is a static file with a hardcoded date (`2026-04-25`). It will never update automatically, and `lastmod` accuracy matters for crawl prioritization.
+
+**The fix:** Serve the sitemap dynamically from Express so `lastmod` always reflects today's date and you can easily add new pages.
+
+### Add to `artifacts/api-server/src/routes/index.ts`
+
+```typescript
+import sitemapRouter from "./sitemap";
+router.use("/", sitemapRouter);
+```
+
+### Create `artifacts/api-server/src/routes/sitemap.ts`
+
+```typescript
+import { Router } from "express";
+const router = Router();
+const ORIGIN = process.env.SITE_ORIGIN || "https://pinterest-video-grabber--irfanarif1984.replit.app";
+const TODAY = new Date().toISOString().split("T")[0];
+
+const PAGES = [
+  { loc: "/",                                   priority: "1.0", freq: "weekly"  },
+  { loc: "/pinterest-gif-downloader",           priority: "0.9", freq: "monthly" },
+  { loc: "/pinterest-image-downloader",         priority: "0.9", freq: "monthly" },
+  { loc: "/pinterest-to-mp3",                   priority: "0.9", freq: "monthly" },
+  { loc: "/how-to-download-pinterest-videos",   priority: "0.8", freq: "monthly" },
+  { loc: "/about",                              priority: "0.4", freq: "yearly"  },
+  { loc: "/privacy-policy",                     priority: "0.3", freq: "yearly"  },
+  { loc: "/terms-of-service",                   priority: "0.3", freq: "yearly"  },
+];
+
+router.get("/sitemap.xml", (_req, res) => {
+  res.header("Content-Type", "application/xml");
+  res.header("Cache-Control", "public, max-age=86400");
+  const urls = PAGES.map(p => `
+  <url>
+    <loc>${ORIGIN}${p.loc}</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>${p.freq}</changefreq>
+    <priority>${p.priority}</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="${ORIGIN}${p.loc}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}/"/>
+  </url>`).join("");
+  res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+${urls}
+</urlset>`);
+});
+
+router.get("/robots.txt", (_req, res) => {
+  res.header("Content-Type", "text/plain");
+  res.send(`User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+
+Sitemap: ${ORIGIN}/sitemap.xml
+Sitemap: ${ORIGIN}/sitemap-images.xml
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Crawl-delay: 10`);
+});
+
+export default router;
+```
+
+---
+
+## GAP #7 — NAV LINKS USE ABBREVIATED ANCHOR TEXT
+
+**The problem:** The `SiteHeader.tsx` nav shows "GIF", "Image", "MP3", "Guide" as link text. These are too short and contain no keywords. Google uses anchor text of internal links as a ranking signal.
+
+**The fix:** Update `artifacts/pinsave/src/components/SiteHeader.tsx`
+
+Replace the nav links section:
+```tsx
+// BEFORE:
+<Link href="/pinterest-gif-downloader" className="hover:text-foreground transition-colors">GIF</Link>
+<Link href="/pinterest-image-downloader" className="hover:text-foreground transition-colors">Image</Link>
+<Link href="/pinterest-to-mp3" className="hover:text-foreground transition-colors">MP3</Link>
+<Link href="/how-to-download-pinterest-videos" className="hover:text-foreground transition-colors">Guide</Link>
+
+// AFTER:
+<Link href="/pinterest-gif-downloader" className="hover:text-foreground transition-colors">GIF Downloader</Link>
+<Link href="/pinterest-image-downloader" className="hover:text-foreground transition-colors">Image Downloader</Link>
+<Link href="/pinterest-to-mp3" className="hover:text-foreground transition-colors">Pinterest to MP3</Link>
+<Link href="/how-to-download-pinterest-videos" className="hover:text-foreground transition-colors">How To Guide</Link>
+```
+
+---
+
+## GAP #8 — FOOTER MISSING PRIVACY POLICY & TERMS PAGES
+
+**The problem:** `sitemap.xml` references `/privacy-policy` and `/terms-of-service` but these pages don't exist. Google will flag them as 404 errors when crawling the sitemap. Also, the footer links to these pages which return 404 — bad for crawl budget.
+
+**The fix:** 
+
+### Create `artifacts/pinsave/src/pages/PrivacyPolicy.tsx`
+
+```tsx
+import { usePageSEO, ORIGIN_URL } from "@/lib/seo";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
+import Breadcrumbs from "@/components/Breadcrumbs";
+
+export default function PrivacyPolicy() {
+  usePageSEO({
+    title: "Privacy Policy | PinSavePro",
+    description: "PinSavePro privacy policy. We do not collect personal data. Read how we handle your information.",
+    canonical: "/privacy-policy",
+  });
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      <SiteHeader />
+      <Breadcrumbs items={[{ name: "Privacy Policy" }]} />
+      <main className="flex-1 max-w-3xl mx-auto px-6 py-16" id="main-content">
+        <h1 className="font-display text-4xl font-bold mb-8">Privacy Policy</h1>
+        <div className="prose prose-invert max-w-none space-y-6 text-muted-foreground leading-relaxed">
+          <p>Last updated: April 25, 2026</p>
+          <h2 className="text-foreground font-bold text-xl">Information We Collect</h2>
+          <p>PinSavePro does not require registration or login. We do not collect personally identifiable information such as your name, email address, or payment details.</p>
+          <h2 className="text-foreground font-bold text-xl">URL Processing</h2>
+          <p>When you paste a Pinterest URL, it is sent to our server solely to fetch media information from Pinterest's public CDN. We do not store URLs, downloaded files, or any data about your usage sessions beyond anonymous server logs retained for 7 days.</p>
+          <h2 className="text-foreground font-bold text-xl">Cookies</h2>
+          <p>PinSavePro does not use tracking cookies or third-party advertising cookies. We may use essential session cookies required for the site to function.</p>
+          <h2 className="text-foreground font-bold text-xl">Third-Party Services</h2>
+          <p>Our site may use Google Fonts (fonts loaded from Google's CDN) and optionally Google Analytics 4 for anonymous traffic analysis. If analytics is enabled, IP addresses are anonymized.</p>
+          <h2 className="text-foreground font-bold text-xl">Contact</h2>
+          <p>If you have questions about this privacy policy, please contact us through our website's contact form.</p>
+        </div>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
+```
+
+### Create `artifacts/pinsave/src/pages/TermsOfService.tsx`
+
+```tsx
+import { usePageSEO } from "@/lib/seo";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
+import Breadcrumbs from "@/components/Breadcrumbs";
+
+export default function TermsOfService() {
+  usePageSEO({
+    title: "Terms of Service | PinSavePro",
+    description: "PinSavePro terms of service. Read the rules for using our free Pinterest video downloader.",
+    canonical: "/terms-of-service",
+  });
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      <SiteHeader />
+      <Breadcrumbs items={[{ name: "Terms of Service" }]} />
+      <main className="flex-1 max-w-3xl mx-auto px-6 py-16" id="main-content">
+        <h1 className="font-display text-4xl font-bold mb-8">Terms of Service</h1>
+        <div className="prose prose-invert max-w-none space-y-6 text-muted-foreground leading-relaxed">
+          <p>Last updated: April 25, 2026</p>
+          <h2 className="text-foreground font-bold text-xl">Acceptance of Terms</h2>
+          <p>By using PinSavePro, you agree to these terms. If you disagree with any part of the terms, you may not use our service.</p>
+          <h2 className="text-foreground font-bold text-xl">Permitted Use</h2>
+          <p>PinSavePro is provided for personal, non-commercial use only. You may use it to download content you have the right to access. You must not use PinSavePro to download, reproduce, or distribute copyrighted content without permission from the rights holder.</p>
+          <h2 className="text-foreground font-bold text-xl">No Affiliation with Pinterest</h2>
+          <p>PinSavePro is an independent service and is not affiliated with, endorsed by, or sponsored by Pinterest, Inc. Pinterest is a trademark of Pinterest, Inc.</p>
+          <h2 className="text-foreground font-bold text-xl">Disclaimer</h2>
+          <p>PinSavePro does not host, store, or cache any Pinterest content on its servers. All media is fetched directly from Pinterest's public CDN. We are not responsible for the content of downloaded pins.</p>
+          <h2 className="text-foreground font-bold text-xl">Availability</h2>
+          <p>We reserve the right to modify or discontinue the service at any time without notice. We are not liable for any interruption of service.</p>
+        </div>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
+```
+
+### Register both pages in `artifacts/pinsave/src/App.tsx`
+
+```tsx
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsOfService from "@/pages/TermsOfService";
+
+// Add inside <Switch>:
+<Route path="/privacy-policy" component={PrivacyPolicy} />
+<Route path="/terms-of-service" component={TermsOfService} />
+```
+
+### Update `SiteFooter.tsx` links for Privacy and Terms:
+```tsx
+<li><Link href="/privacy-policy" className="hover:text-foreground">Privacy Policy</Link></li>
+<li><Link href="/terms-of-service" className="hover:text-foreground">Terms of Service</Link></li>
+```
+
+---
+
+## GAP #9 — GOOGLE ANALYTICS 4 NOT INSTALLED
+
+**The problem:** There's no GA4 tracking in the project. Without it you cannot monitor Search Console performance, track which pages drive traffic, or measure Core Web Vitals in field data.
+
+**The fix:** Add GA4 to `artifacts/pinsave/index.html` `<head>`:
+
+```html
+<!-- Replace G-XXXXXXXXXX with your real GA4 Measurement ID -->
+<!-- Get one free at: analytics.google.com → Admin → Create Property -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX', {
+    anonymize_ip: true,
+    cookie_flags: 'SameSite=None;Secure'
+  });
+</script>
+```
+
+Also add Google Search Console verification tag (get from search.google.com/search-console):
+```html
+<meta name="google-site-verification" content="YOUR_VERIFICATION_CODE_HERE" />
+```
+
+---
+
+## GAP #10 — FONT LOADING BLOCKS RENDER (LCP IMPACT)
+
+**The problem:** Google Fonts are loaded with a synchronous `<link rel="stylesheet">` in `index.html`. This blocks rendering until fonts are fetched, directly hurting LCP score.
+
+**The fix:** Update font loading in `artifacts/pinsave/index.html`:
+
+```html
+<!-- BEFORE: -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+
+<!-- AFTER: non-render-blocking -->
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Syne:wght@600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+<noscript>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+</noscript>
+```
+
+Also add `font-display: swap` in `artifacts/pinsave/src/index.css` if you have any `@font-face` declarations.
+
+---
+
+## FINAL CHECKLIST AFTER IMPLEMENTATION
+
+Run these validations after deploying:
+
+| Tool | What to check |
+|------|---------------|
+| `https://search.google.com/test/rich-results` | Paste homepage URL — verify FAQ, HowTo, WebApplication schemas pass |
+| `https://pagespeed.web.dev` | Target 90+ on both mobile and desktop |
+| `https://search.google.com/test/mobile-friendly` | Must pass |
+| `https://developers.facebook.com/tools/debug` | Paste URL — verify OG image and title render |
+| `https://cards-dev.twitter.com/validator` | Verify Twitter Card renders |
+| `https://securityheaders.com` | Target grade A |
+| `curl -I https://YOUR-DOMAIN.com/sitemap.xml` | Verify 200 response and XML content-type |
+| `curl -I https://YOUR-DOMAIN.com/robots.txt` | Verify 200 response |
+| `https://search.google.com/search-console` | Add property, verify, submit sitemap URL |
+
+## PRIORITY ORDER OF IMPLEMENTATION
+
+1. **Gap #1** — SSR (most critical, without this Googlebot indexes nothing on sub-pages)
+2. **Gap #8** — Privacy/Terms pages (prevents 404 crawl errors referenced in sitemap)
+3. **Gap #6** — Dynamic sitemap (removes static staleness)
+4. **Gap #4** — Production security headers / compression
+5. **Gap #7** — Nav anchor text (quick win for internal link signals)
+6. **Gap #3** — Per-page JSON-LD schemas
+7. **Gap #10** — Non-blocking font loading (LCP improvement)
+8. **Gap #9** — Google Analytics 4
+9. **Gap #2** — Environment variable for ORIGIN
+10. **Gap #5** — PWA PNG icons

@@ -177,7 +177,11 @@ export default function DownloaderForm() {
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-auto">
                   {extractMutation.data.formats.map((format, idx) => {
-                    const dlUrl = `${import.meta.env.BASE_URL}api/pinterest/proxy?url=${encodeURIComponent(format.url)}&filename=${encodeURIComponent(`pinsave-${format.kind}-${Date.now()}`)}`;
+                    const extFromUrl = format.url.match(/\.([a-z0-9]{3,4})(?:\?|$)/i)?.[1]?.toLowerCase();
+                    const extFromMime = format.mimeType?.split("/")[1]?.split(";")[0]?.replace("jpeg", "jpg");
+                    const ext = extFromUrl || extFromMime || (format.kind === "video" ? "mp4" : format.kind === "audio" ? "mp3" : "jpg");
+                    const filename = `pinsave-${format.kind}-${Date.now()}.${ext}`;
+                    const dlUrl = `${import.meta.env.BASE_URL}api/pinterest/proxy?url=${encodeURIComponent(format.url)}&filename=${encodeURIComponent(filename)}`;
                     return (
                       <a
                         key={idx}
