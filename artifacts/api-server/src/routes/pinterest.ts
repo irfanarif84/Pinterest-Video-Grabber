@@ -251,7 +251,72 @@ function parseFromPinObject(pin: Record<string, unknown>): ExtractedPin {
   };
 }
 
-function parseFromMeta(html: string): ExtractedPin {
+// Pinterest's HLS playlist URLs follow the pattern
+//   https://v1.pinimg.com/videos/mc/hls/<a>/<b>/<c>/<hash>.m3u8
+// Direct MP4s are at the same hash under quality folders:
+//   https://v1.pinimg.com/videos/mc/720p/<a>/<b>/<c>/<hash>.mp4
+// We synthesise candidate MP4 URLs and HEAD-check them so users always
+// get a real .mp4 instead of an HLS playlist their browser can't save.
+function deriveMp4UrlsFromHls(hlsUrl: string): Array<{ key: string; url: string; height: number }> {
+  const m = hlsUrl.match(/^(https?:\/\/[^/]+\/videos\/mc)\/(?:hls)\/(.+?)\.m3u8(\?.*)?$/i);
+  if (!m) return [];
+  const [, base, path] = m;
+  const variants: Array<[string, number]> = [
+    ["V_1080P", 1080],
+    ["V_720P", 720],
+    ["V_480P", 480],
+    ["V_240P", 240],
+  ];
+  return variants.map(([key, height]) => ({
+    key,
+    url: `${base}/${key.replace(/^V_/, "").toLowerCase()}/${path}.mp4`,
+    height,
+  }));
+}
+
+async function headOk(url: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, {
+      method: "HEAD",
+      headers: {
+        "User-Agent": UA,
+        Referer: "https://www.pinterest.com/",
+      },
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function probeMp4Variants(
+  hlsUrl: string,
+  knownWidth?: number,
+  knownHeight?: number,
+): Promise<Record<string, VideoEntry>> {
+  const candidates = deriveMp4UrlsFromHls(hlsUrl);
+  if (candidates.length === 0) return {};
+  const checks = await Promise.all(
+    candidates.map(async (c) => ({ ...c, ok: await headOk(c.url) })),
+  );
+  const out: Record<string, VideoEntry> = {};
+  // Preserve aspect ratio if width/height are known (taken from og:video meta)
+  const ratio =
+    knownWidth && knownHeight && knownHeight > 0
+      ? knownWidth / knownHeight
+      : undefined;
+  for (const c of checks) {
+    if (!c.ok) continue;
+    out[c.key] = {
+      url: c.url,
+      height: c.height,
+      width: ratio ? Math.round(c.height * ratio) : undefined,
+    };
+  }
+  return out;
+}
+
+async function parseFromMeta(html: string): Promise<ExtractedPin> {
   const ogVideo = pickMeta(html, "og:video") ?? pickMeta(html, "og:video:url");
   const ogImage = pickMeta(html, "og:image");
   const w = pickMeta(html, "og:video:width") ?? pickMeta(html, "og:image:width");
@@ -259,14 +324,18 @@ function parseFromMeta(html: string): ExtractedPin {
   const title = pickMeta(html, "og:title") ?? "";
   const description = pickMeta(html, "og:description") ?? "";
 
-  const videos: Record<string, VideoEntry> = {};
+  let videos: Record<string, VideoEntry> = {};
   const images: ImageEntry[] = [];
   if (ogVideo) {
-    videos["V_HLSV4"] = {
-      url: ogVideo,
-      width: asNumber(w),
-      height: asNumber(h),
-    };
+    if (ogVideo.endsWith(".m3u8") || ogVideo.includes(".m3u8?")) {
+      videos = await probeMp4Variants(ogVideo, asNumber(w), asNumber(h));
+    } else {
+      videos["V_DIRECT"] = {
+        url: ogVideo,
+        width: asNumber(w),
+        height: asNumber(h),
+      };
+    }
   }
   if (ogImage) {
     images.push({
@@ -274,9 +343,15 @@ function parseFromMeta(html: string): ExtractedPin {
       width: asNumber(w),
       height: asNumber(h),
     });
+    // Also synthesise an /originals/ URL — Pinterest serves higher-res copies there
+    const orig = ogImage.replace(/\/(?:\d+x|\d+x\d+)\//, "/originals/");
+    if (orig !== ogImage) {
+      images.unshift({ url: orig });
+    }
   }
   let type: "video" | "image" | "gif" = "image";
-  if (ogVideo) type = "video";
+  if (Object.keys(videos).length > 0) type = "video";
+  else if (ogImage && /\.gif(\?|$)/i.test(ogImage)) type = "gif";
   return {
     type,
     title: title.trim(),
