@@ -32,7 +32,13 @@ export default function DownloaderForm() {
       urlSchema.parse(url);
       extractMutation.mutate({ data: { url } }, {
         onError: (err: any) => {
-          setError(err?.error || "Failed to extract video. Please try again.");
+          const apiMsg =
+            err?.data?.error ??
+            err?.response?.data?.error ??
+            (typeof err?.message === "string" && err.message.includes(": ")
+              ? err.message.split(": ").slice(1).join(": ")
+              : err?.message);
+          setError(apiMsg || "Failed to extract video. Please try again.");
         }
       });
     } catch (err: any) {
